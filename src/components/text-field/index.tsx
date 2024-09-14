@@ -26,8 +26,11 @@ const TextFieldStyle = styled(TextField)<TextFieldProps>(({ theme }) => {
       '&.Mui-error': {
         borderColor: theme.palette.error.main
       },
-      '&.Mui-focused': {
+      '&.Mui-focused .MuiInputBase-input, &.Mui-error .MuiInputBase-input, &.Mui-warning .MuiInputBase-input': {
         boxShadow: theme.shadows[2],
+        '&::placeholder': {
+          padding: '0 !important' // No padding for placeholder on focus
+        },
         '& .MuiInputBase-input:not(.MuiInputBase-readOnly):not([readonly])::placeholder': {
           transform: 'translateX(4px)'
         },
@@ -60,14 +63,29 @@ const TextFieldStyle = styled(TextField)<TextFieldProps>(({ theme }) => {
         marginTop: '0 !important'
       }
     },
-    '.MuiFormHelperText-root.Mui-error': {}
+    '& .MuiFormHelperText-root': {
+      lineHeight: 1.1534,
+      margin: theme.spacing(1, 0, 0),
+      color: theme.palette.text.secondary,
+      fontSize: theme.typography.body2.fontSize,
+      '&.Mui-error': {
+        color: theme.palette.error.main
+      }
+    }
   }
 })
 
 const CustomTextField = (props: TextFieldProps) => {
   const { size = 'small', InputLabelProps, variant = 'filled', ...rests } = props
 
-  return <TextFieldStyle size={size} InputLabelProps={{ ...InputLabelProps }} variant={variant} {...rests} />
+  return (
+    <TextFieldStyle
+      size={size}
+      InputLabelProps={{ ...InputLabelProps, shrink: true, 'aria-placeholder': 'padding: 0' }}
+      variant={variant}
+      {...rests}
+    />
+  )
 }
 
 export default CustomTextField
