@@ -5,17 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 // ** MUI import
-import {
-  Box,
-  Button,
-  Checkbox,
-  CssBaseline,
-  FormControlLabel,
-  IconButton,
-  InputAdornment,
-  Typography,
-  useTheme
-} from '@mui/material'
+import { Box, Button, CssBaseline, IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
 
 //** component import  */
 import CustomTextField from 'src/components/text-field'
@@ -33,8 +23,8 @@ import { EMAIL_REG, PASSWORD_REG } from 'src/configs/regex'
 import { useState } from 'react'
 
 // ** Images
-import LoginDark from '/public/images/login-dark.png'
-import LoginLight from '/public/images/login-light.png'
+import RegisterDark from '/public/images/register-dark.png'
+import RegisterLight from '/public/images/register-light.png'
 import GoogleSvg from '/public/svgs/google.svg'
 import FacebookSvg from '/public/svgs/facebook.svg'
 
@@ -43,11 +33,13 @@ type TProps = {}
 type TDefaultValues = {
   email: string
   password: string
+  confirmPassword: string
 }
 
 const LoginPage: NextPage<TProps> = () => {
   // **state
   const [showPassword, setShowPassword] = useState<Boolean>(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState<Boolean>(false)
   const [isRemember, setIsRemember] = useState(true)
 
   // **theme
@@ -64,12 +56,21 @@ const LoginPage: NextPage<TProps> = () => {
       .matches(
         PASSWORD_REG,
         'Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+      ),
+    confirmPassword: yup
+      .string()
+      .required('This field is required')
+      .matches(
+        PASSWORD_REG,
+        'Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one digit, and one special character.'
       )
+      .oneOf([yup.ref('password'), ''], 'Password and confirm password do not match.')
   })
 
   const defaultValues: TDefaultValues = {
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   }
 
   const {
@@ -109,7 +110,7 @@ const LoginPage: NextPage<TProps> = () => {
         }}
       >
         <Image
-          src={theme.palette.mode === 'light' ? LoginLight : LoginDark}
+          src={theme.palette.mode === 'light' ? RegisterDark : RegisterLight}
           alt='login image'
           style={{ height: '100%', width: '100%', objectFit: 'contain' }}
         />
@@ -125,7 +126,7 @@ const LoginPage: NextPage<TProps> = () => {
           }}
         >
           <Typography component='h1' variant='h5'>
-            Sign in
+            Register
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
             <Box sx={{ mt: 2, width: '21rem' }}>
@@ -189,28 +190,49 @@ const LoginPage: NextPage<TProps> = () => {
               />
             </Box>
 
-            <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name='rememberMe'
-                    checked={isRemember}
-                    onChange={e => setIsRemember(e.target.checked)}
-                    value='remember'
-                    color='primary'
+            <Box sx={{ mt: 2, width: '21rem' }}>
+              <Controller
+                control={control}
+                rules={{
+                  required: true
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <CustomTextField
+                    required
+                    fullWidth
+                    label='Confirm Password'
+                    placeholder='Confirm Password'
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    error={Boolean(errors?.confirmPassword)}
+                    helperText={errors?.confirmPassword?.message}
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <IconButton edge='end' onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                            {showConfirmPassword ? (
+                              <IconifyIcon icon='material-symbols:visibility-outline' />
+                            ) : (
+                              <IconifyIcon icon='material-symbols:visibility-off-outline' />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
                   />
-                }
-                label='Remember me'
+                )}
+                name='confirmPassword'
               />
-
-              <Typography>Forgot password?</Typography>
             </Box>
+
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-              Sign In
+              Sign Up
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography>Don't have an account?</Typography>
-              <Link href='/register'>{'Sign up'}</Link>
+              <Typography>Have you already had an account ? </Typography>
+              <Link href='/login'>{'Log In'}</Link>
             </Box>
             <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
