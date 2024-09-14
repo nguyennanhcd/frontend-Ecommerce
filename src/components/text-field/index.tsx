@@ -2,8 +2,6 @@
 import { TextFieldProps, TextField, styled } from '@mui/material'
 
 const TextFieldStyle = styled(TextField)<TextFieldProps>(({ theme }) => {
-  console.log('theme', { theme })
-
   return {
     '& .MuiInputLabel-root': {
       transform: 'none',
@@ -61,7 +59,8 @@ const TextFieldStyle = styled(TextField)<TextFieldProps>(({ theme }) => {
       '& .MuiInputAdornment-root': {
         marginTop: '0 !important'
       }
-    }
+    },
+    '.MuiFormHelperText-root.Mui-error': {}
   }
 })
 
