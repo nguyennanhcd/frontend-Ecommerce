@@ -232,7 +232,9 @@ const LoginPage: NextPage<TProps> = () => {
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Typography>Have you already had an account ? </Typography>
-              <Link href='/login'>{'Log In'}</Link>
+              <Link style={{ color: theme.palette.primary.main }} href='/login'>
+                {'Log In'}
+              </Link>
             </Box>
             <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>

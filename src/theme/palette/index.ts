@@ -34,7 +34,7 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin): Palette => {
     },
     mode: mode,
     common: {
-      black: '#000',
+      black: '#071021',
       white: whiteColor
     },
     primary: {
@@ -90,8 +90,8 @@ const DefaultPalette = (mode: Palette['mode'], skin: Skin): Palette => {
       A700: '#616161'
     },
     text: {
-      primary: `rgba(${mainColor}, 0.78)`,
-      secondary: `rgba(${mainColor}, 0.68)`,
+      primary: `rgba(${mode === 'light' ? lightColor : '255,255,255'}, 0.87)`,
+      secondary: `rgba(${mode === 'light' ? lightColor : '255,255,255'}, 0.68)`,
       disabled: `rgba(${mainColor}, 0.42)`
     },
     divider: `rgba(${mainColor}, 0.16)`,
