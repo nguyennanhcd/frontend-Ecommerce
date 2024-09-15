@@ -38,6 +38,9 @@ import LoginLight from '/public/images/login-light.png'
 import GoogleSvg from '/public/svgs/google.svg'
 import FacebookSvg from '/public/svgs/facebook.svg'
 
+//** hooks
+import { useAuth } from 'src/hooks/useAuth'
+
 type TProps = {}
 
 type TDefaultValues = {
@@ -49,6 +52,9 @@ const LoginPage: NextPage<TProps> = () => {
   // **state
   const [showPassword, setShowPassword] = useState<Boolean>(false)
   const [isRemember, setIsRemember] = useState(true)
+
+  // ** context
+  const { login } = useAuth()
 
   // **theme
   const theme = useTheme()
@@ -78,11 +84,14 @@ const LoginPage: NextPage<TProps> = () => {
     formState: { errors }
   } = useForm({
     defaultValues,
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: yupResolver(schema)
   })
 
   const onSubmit = (data: { email: string; password: string }) => {
+    if (!Object.keys(errors)?.length) {
+      login({ ...data, rememberMe: isRemember })
+    }
     console.log('data: ', { data, errors })
   }
 
@@ -175,9 +184,15 @@ const LoginPage: NextPage<TProps> = () => {
                         <InputAdornment position='end'>
                           <IconButton edge='end' onClick={() => setShowPassword(!showPassword)}>
                             {showPassword ? (
-                              <IconifyIcon icon='material-symbols:visibility-outline' />
+                              <IconifyIcon
+                                icon='material-symbols:visibility-outline'
+                                style={{ color: theme.palette.primary.main }}
+                              />
                             ) : (
-                              <IconifyIcon icon='material-symbols:visibility-off-outline' />
+                              <IconifyIcon
+                                icon='material-symbols:visibility-off-outline'
+                                style={{ color: theme.palette.primary.main }}
+                              />
                             )}
                           </IconButton>
                         </InputAdornment>
@@ -210,7 +225,9 @@ const LoginPage: NextPage<TProps> = () => {
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Typography>Don't have an account?</Typography>
-              <Link href='/register'>{'Sign up'}</Link>
+              <Link style={{ color: theme.palette.primary.main }} href='/register'>
+                {'Sign up'}
+              </Link>
             </Box>
             <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
