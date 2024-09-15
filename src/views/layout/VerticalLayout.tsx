@@ -7,6 +7,7 @@ import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import { mainListItems, secondaryListItems } from 'src/views/layout/listItem'
+import IconifyIcon from 'src/components/Icon'
 
 const drawerWidth: number = 240
 
@@ -52,7 +53,9 @@ const VerticalLayout: NextPage<TProps> = ({ open, toggleDrawer }) => {
           px: [1]
         }}
       >
-        <IconButton onClick={toggleDrawer}>ádf</IconButton>
+        <IconButton onClick={toggleDrawer}>
+          <IconifyIcon icon='eva:menu-arrow-fill' />
+        </IconButton>
       </Toolbar>
       <Divider />
       <List component='nav'>

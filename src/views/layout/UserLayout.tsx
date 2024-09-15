@@ -1,9 +1,16 @@
+// ** react
 import * as React from 'react'
+
+// **next
 import { NextPage } from 'next'
+
+// **mui
 import CssBaseline from '@mui/material/CssBaseline'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Container from '@mui/material/Container'
+
+// ** layout
 import VerticalLayout from './VerticalLayout'
 import HorizontalLayout from './HorizontalLayout'
 

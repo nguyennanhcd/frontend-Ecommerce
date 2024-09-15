@@ -1,11 +1,17 @@
+// **next
 import * as React from 'react'
 import { NextPage } from 'next'
+
+// **mui
 import { styled } from '@mui/material/styles'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Badge from '@mui/material/Badge'
+
+// **components
+import IconifyIcon from 'src/components/Icon'
 
 const drawerWidth: number = 240
 
@@ -22,6 +28,8 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: prop => prop !== 'open'
 })<AppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
+  // backgroundColor: theme.palette.customColors.bodyBg,
+  // color: theme.palette.primary.main,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen
@@ -53,13 +61,15 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer }) => {
             marginRight: '36px',
             ...(open && { display: 'none' })
           }}
-        ></IconButton>
+        >
+          <IconifyIcon icon='material-symbols:menu' />
+        </IconButton>
         <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
           Dashboard
         </Typography>
         <IconButton color='inherit'>
           <Badge badgeContent={4} color='secondary'>
-            {/* <NotificationsIcon /> */}
+            <IconifyIcon icon='mingcute:notification-line' />
           </Badge>
         </IconButton>
       </Toolbar>
