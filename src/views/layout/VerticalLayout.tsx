@@ -14,7 +14,6 @@ import IconButton from '@mui/material/IconButton'
 import IconifyIcon from 'src/components/Icon'
 
 // **react
-import { useState } from 'react'
 import ListVerticalLayout from './VerticalLayoutList'
 
 const drawerWidth: number = 240

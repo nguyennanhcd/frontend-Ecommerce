@@ -1,16 +1,16 @@
 export const VerticalItem = [
   {
-    title: 'Email',
-    icon: 'hh',
+    title: 'Parent 1',
+    icon: 'material-symbols:mail-outline',
     path: '/',
     children: [
       {
-        title: 'Inbox',
+        title: 'Children 1 1',
         icon: 'h',
         path: '/email/inbox',
         children: [
           {
-            title: 'ddd',
+            title: 'Children 1 2',
             icon: 'h',
             path: '/email/inbox'
           }
@@ -19,12 +19,12 @@ export const VerticalItem = [
     ]
   },
   {
-    title: 'password',
+    title: 'Parent 2',
     icon: 'hh',
     path: '/',
     children: [
       {
-        title: 'Inbox',
+        title: 'Children 2 1',
         icon: 'h',
         path: '/email/inbox'
       }
