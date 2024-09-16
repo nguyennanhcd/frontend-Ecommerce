@@ -2,7 +2,6 @@
 import { Box } from '@mui/material'
 import Head from 'next/head'
 import { ReactNode } from 'react'
-import CustomTextField from 'src/components/text-field'
 import LayoutNoAppBar from 'src/views/layout/LayoutNoAppBar'
 
 export default function Home() {
