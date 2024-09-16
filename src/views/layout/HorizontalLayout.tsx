@@ -3,7 +3,7 @@ import * as React from 'react'
 import { NextPage } from 'next'
 
 // **mui
-import { styled, useTheme } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -48,7 +48,6 @@ const AppBar = styled(MuiAppBar, {
 }))
 
 const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) => {
-  const theme = useTheme()
   return (
     <AppBar position='absolute' open={open}>
       <Toolbar
@@ -75,11 +74,11 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
           Dashboard
         </Typography>
         <UserDropDown />
-        <IconButton color='inherit'>
+        {/* <IconButton color='inherit'>
           <Badge badgeContent={4} color='primary'>
             <IconifyIcon icon='mingcute:notification-line' />
           </Badge>
-        </IconButton>
+        </IconButton> */}
       </Toolbar>
     </AppBar>
   )

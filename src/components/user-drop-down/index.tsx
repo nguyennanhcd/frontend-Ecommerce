@@ -3,15 +3,23 @@ import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip
 
 // ** React
 import React from 'react'
+import IconifyIcon from '../Icon'
+import Image from 'next/image'
+import { useAuth } from 'src/hooks/useAuth'
 
 type TProps = {}
 
 const UserDropDown = (props: TProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
   const open = Boolean(anchorEl)
+
+  const { user, logout } = useAuth()
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -27,7 +35,13 @@ const UserDropDown = (props: TProps) => {
             aria-haspopup='true'
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}>
+              {user?.avatar ? (
+                <Image src={user?.avatar || ''} alt='user' style={{ height: 'auto', width: 'auto' }} />
+              ) : (
+                <IconifyIcon icon='basil:user-outline' />
+              )}
+            </Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -69,6 +83,9 @@ const UserDropDown = (props: TProps) => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
+          {user?.email} {user?.middleName} {user?.lastName}
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
           <Avatar /> Profile
         </MenuItem>
         <MenuItem onClick={handleClose}>
@@ -83,7 +100,7 @@ const UserDropDown = (props: TProps) => {
           <ListItemIcon></ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={logout}>
           <ListItemIcon></ListItemIcon>
           Logout
         </MenuItem>
