@@ -12,6 +12,7 @@ import Badge from '@mui/material/Badge'
 
 // **components
 import IconifyIcon from 'src/components/Icon'
+import UserDropDown from 'src/components/user-drop-down'
 
 const drawerWidth: number = 240
 
@@ -73,6 +74,7 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
         <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
           Dashboard
         </Typography>
+        <UserDropDown />
         <IconButton color='inherit'>
           <Badge badgeContent={4} color='primary'>
             <IconifyIcon icon='mingcute:notification-line' />
