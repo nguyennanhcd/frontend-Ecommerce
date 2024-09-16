@@ -25,7 +25,7 @@ type TProps = {
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: prop => prop !== 'open'
-})(({ theme, open }) => ({
+})<{ open?: boolean }>(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -42,9 +42,9 @@ const Drawer = styled(MuiDrawer, {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    width: theme.spacing(7),
+    width: theme.spacing(10),
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9)
+      width: theme.spacing(12)
     }
   })
 }))
@@ -60,12 +60,12 @@ const VerticalLayout: NextPage<TProps> = ({ open, toggleDrawer }) => {
           px: [1]
         }}
       >
-        <IconButton onClick={toggleDrawer}>
+        <IconButton style={{ transform: 'translateX(0.5rem)' }} onClick={toggleDrawer}>
           <IconifyIcon icon='mdi:menu-open' />
         </IconButton>
       </Toolbar>
       <Divider />
-      <ListVerticalLayout />
+      <ListVerticalLayout open={Boolean(open)} />
     </Drawer>
   )
 }

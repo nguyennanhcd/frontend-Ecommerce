@@ -3,7 +3,7 @@ import * as React from 'react'
 import { NextPage } from 'next'
 
 // **mui
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -22,14 +22,16 @@ interface AppBarProps extends MuiAppBarProps {
 type TProps = {
   open?: boolean
   toggleDrawer: () => void
+  isHideMenu?: boolean
 }
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: prop => prop !== 'open'
 })<AppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  // backgroundColor: theme.palette.customColors.bodyBg,
-  // color: theme.palette.primary.main,
+  backgroundColor:
+    theme.palette.mode === 'light' ? theme.palette.customColors.lightPaperBg : theme.palette.customColors.darkPaperBg,
+  color: theme.palette.primary.main,
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen
@@ -44,31 +46,35 @@ const AppBar = styled(MuiAppBar, {
   })
 }))
 
-const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer }) => {
+const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) => {
+  const theme = useTheme()
   return (
     <AppBar position='absolute' open={open}>
       <Toolbar
         sx={{
-          pr: '24px'
+          pr: '24px',
+          margin: '0 0.5rem'
         }}
       >
-        <IconButton
-          edge='start'
-          color='inherit'
-          aria-label='open drawer'
-          onClick={toggleDrawer}
-          sx={{
-            marginRight: '36px',
-            ...(open && { display: 'none' })
-          }}
-        >
-          <IconifyIcon icon='material-symbols:menu' />
-        </IconButton>
+        {!isHideMenu && (
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='open drawer'
+            onClick={toggleDrawer}
+            sx={{
+              marginRight: '36px',
+              ...(open && { display: 'none' })
+            }}
+          >
+            <IconifyIcon icon='material-symbols:menu' />
+          </IconButton>
+        )}
         <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
           Dashboard
         </Typography>
         <IconButton color='inherit'>
-          <Badge badgeContent={4} color='secondary'>
+          <Badge badgeContent={4} color='primary'>
             <IconifyIcon icon='mingcute:notification-line' />
           </Badge>
         </IconButton>
