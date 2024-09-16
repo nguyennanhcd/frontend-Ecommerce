@@ -20,7 +20,7 @@ export const VerticalItem = [
   },
   {
     title: 'Parent 2',
-    icon: 'hh',
+    icon: 'bi:phone',
     path: '/',
     children: [
       {
