@@ -1,116 +1,69 @@
-import * as React from 'react'
+// ** next
 import { NextPage } from 'next'
-import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+
+// ** mui
+import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+
+// ** react
+import React, { useState } from 'react'
+
+// ** config
 import { VerticalItem } from 'src/configs/layout'
+
+// ** components
 import IconifyIcon from 'src/components/Icon'
 
 type TProps = {}
 
-const ListVerticalLayout: NextPage<TProps> = () => {
-  const [open, setOpen] = React.useState(true)
+const RecursiveListItem = ({ items, level }: { items: any; level: number }) => {
+  const [openItem, setOpenItem] = useState<{ [key: string]: boolean }>({})
 
-  const handleClick = () => {
-    setOpen(!open)
-  }
-  return (
-    <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-      component='nav'
-      aria-labelledby='nested-list-subheader'
-    >
-      {VerticalItem.map((item, id) => {
-        return (
-          <React.Fragment key={id}>
-            <ListItemButton onClick={item.children && handleClick}>
-              <ListItemIcon>
-                <IconifyIcon icon={item?.icon} />
-              </ListItemIcon>
-              <ListItemText primary={item?.title} />
-            </ListItemButton>
-            {item.children && item.children.length > 0 && (
-              <>
-                {item.children.map(child => {
-                  return (
-                    <Collapse in={open} timeout='auto' unmountOnExit>
-                      <List component='div' disablePadding>
-                        <ListItemButton sx={{ pl: 4 }}>
-                          <ListItemIcon>
-                            <IconifyIcon icon={child.icon} />
-                          </ListItemIcon>
-                          <ListItemText primary={child.title} />
-                        </ListItemButton>
-                      </List>
-                    </Collapse>
-                  )
-                })}
-              </>
-            )}
-          </React.Fragment>
-        )
-      })}
-    </List>
-  )
-}
-
-export default ListVerticalLayout
-
-/*
-import * as React from 'react'
-import { NextPage } from 'next'
-import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import { VerticalItem } from 'src/configs/layout'
-import IconifyIcon from 'src/components/Icon'
-
-type TProps = {}
-
-const ListVerticalLayout: NextPage<TProps> = () => {
-  // Dùng một đối tượng để lưu trạng thái mở/đóng cho từng mục
-  const [openItems, setOpenItems] = React.useState<Record<number, boolean>>({})
-
-  // Hàm xử lý việc mở/đóng cho từng mục
-  const handleClick = (id: number) => {
-    setOpenItems(prev => ({
+  const handleClick = (title: string) => {
+    setOpenItem(prev => ({
       ...prev,
-      [id]: !prev[id]
+      [title]: !prev[title]
     }))
   }
 
   return (
+    <>
+      {items.map((item: any, id: number) => (
+        <React.Fragment key={id}>
+          <ListItemButton
+            sx={{ padding: `0.5rem 0.2rem 0.5rem ${level * 0.9}rem`, transform: 'translateX(-0.4rem)' }}
+            onClick={() => item.children && handleClick(item.title)}
+          >
+            <ListItemIcon>
+              <IconifyIcon icon={item?.icon} />
+            </ListItemIcon>
+            <ListItemText primary={item?.title} />
+            {item?.children && item?.children.length > 0 && (
+              <>
+                {openItem[item.title] ? <IconifyIcon icon='mdi:expand-less' /> : <IconifyIcon icon='mdi:expand-more' />}
+              </>
+            )}
+          </ListItemButton>
+          {item.children && item.children.length > 0 && (
+            <Collapse in={openItem[item.title]} timeout='auto' unmountOnExit>
+              <RecursiveListItem items={item.children} level={level + 1} />
+            </Collapse>
+          )}
+        </React.Fragment>
+      ))}
+    </>
+  )
+}
+
+const ListVerticalLayout: NextPage<TProps> = () => {
+  return (
     <List
       sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
       component='nav'
       aria-labelledby='nested-list-subheader'
     >
-      {VerticalItem.map((item, id) => {
-        return (
-          <React.Fragment key={id}>
-            <ListItemButton onClick={() => handleClick(id)}>
-              <ListItemIcon>
-                <IconifyIcon icon={item?.icon} />
-              </ListItemIcon>
-              <ListItemText primary={item?.title} />
-            </ListItemButton>
-            {item.children && item.children.length > 0 && (
-              <Collapse in={!!openItems[id]} timeout='auto' unmountOnExit>
-                <List component='div' disablePadding>
-                  {item.children.map((child, childId) => (
-                    <ListItemButton key={childId} sx={{ pl: 4 }}>
-                      <ListItemIcon>
-                        <IconifyIcon icon={child.icon} />
-                      </ListItemIcon>
-                      <ListItemText primary={child.title} />
-                    </ListItemButton>
-                  ))}
-                </List>
-              </Collapse>
-            )}
-          </React.Fragment>
-        )
-      })}
+      <RecursiveListItem items={VerticalItem} level={1} />
     </List>
   )
 }
 
 export default ListVerticalLayout
-
-*/
