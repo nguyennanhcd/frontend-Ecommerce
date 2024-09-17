@@ -77,11 +77,6 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
         <LanguageDropdown />
         <ModeToggle />
         <UserDropDown />
-        {/* <IconButton color='inherit'>
-          <Badge badgeContent={4} color='primary'>
-            <IconifyIcon icon='mingcute:notification-line' />
-          </Badge>
-        </IconButton> */}
       </Toolbar>
     </AppBar>
   )
