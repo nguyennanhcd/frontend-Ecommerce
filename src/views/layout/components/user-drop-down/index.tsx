@@ -6,10 +6,13 @@ import React from 'react'
 import IconifyIcon from '../../../../components/Icon'
 import Image from 'next/image'
 import { useAuth } from 'src/hooks/useAuth'
+import { useTranslation } from 'react-i18next'
 
 type TProps = {}
 
 const UserDropDown = (props: TProps) => {
+  const { t } = useTranslation()
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const open = Boolean(anchorEl)
@@ -26,7 +29,7 @@ const UserDropDown = (props: TProps) => {
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Tooltip title='Account settings'>
+        <Tooltip title={t('Account')}>
           <IconButton
             onClick={handleClick}
             size='small'
