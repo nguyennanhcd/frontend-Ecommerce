@@ -3,7 +3,7 @@ import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip
 
 // ** React
 import React from 'react'
-import IconifyIcon from '../Icon'
+import IconifyIcon from '../../../../components/Icon'
 import Image from 'next/image'
 import { useAuth } from 'src/hooks/useAuth'
 
