@@ -8,11 +8,11 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import Badge from '@mui/material/Badge'
 
 // **components
 import IconifyIcon from 'src/components/Icon'
-import UserDropDown from 'src/components/user-drop-down'
+import UserDropDown from 'src/views/layout/components/user-drop-down'
+import ModeToggle from './components/mode-toggle'
 
 const drawerWidth: number = 240
 
@@ -73,6 +73,7 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
         <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
           Dashboard
         </Typography>
+        <ModeToggle />
         <UserDropDown />
         {/* <IconButton color='inherit'>
           <Badge badgeContent={4} color='primary'>
