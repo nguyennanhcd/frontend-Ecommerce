@@ -79,11 +79,11 @@ const MyProfilePage: NextPage<TProps> = () => {
   useEffect(() => {
     if (user) {
       reset({
-        email: '',
+        email: user?.email,
         address: '',
         city: '',
         phoneNumber: '',
-        fullName: '',
+        fullName: user?.lastName + user?.middleName + user?.firstName,
         role: user?.role?.name
       })
     }
