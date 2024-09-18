@@ -1,11 +1,12 @@
 // ** Configs
+import axios from 'axios'
 import { CONFIG_API } from 'src/configs/api'
 
 // instance axios
 import instanceAxios from 'src/helpers/axios'
 
 // ** auth
-import { TLoginAuth } from 'src/types/auth'
+import { TRegisterAuth, TLoginAuth } from 'src/types/auth'
 
 export const loginAuth = async (data: TLoginAuth) => {
   try {
@@ -22,5 +23,14 @@ export const logoutAuth = async () => {
     return res.data
   } catch (error) {
     return null
+  }
+}
+
+export const registerAuth = async (data: TRegisterAuth) => {
+  try {
+    const res = await axios.post(`${CONFIG_API.AUTH.INDEX}/register`, data)
+    return res.data
+  } catch (error) {
+    return error
   }
 }
