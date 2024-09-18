@@ -1,5 +1,5 @@
 // ** MUI import
-import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from '@mui/material'
+import { Avatar, Box, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material'
 
 // ** React
 import React from 'react'

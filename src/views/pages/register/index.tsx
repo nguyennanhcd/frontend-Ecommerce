@@ -36,7 +36,7 @@ type TDefaultValues = {
   confirmPassword: string
 }
 
-const LoginPage: NextPage<TProps> = () => {
+const RegisterPage: NextPage<TProps> = () => {
   // **state
   const [showPassword, setShowPassword] = useState<Boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<Boolean>(false)
@@ -252,4 +252,4 @@ const LoginPage: NextPage<TProps> = () => {
   )
 }
 
-export default LoginPage
+export default RegisterPage
