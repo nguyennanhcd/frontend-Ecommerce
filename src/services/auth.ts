@@ -1,6 +1,3 @@
-// ** axios
-import axios from 'axios'
-
 // ** Configs
 import { CONFIG_API } from 'src/configs/api'
 
