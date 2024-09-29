@@ -49,7 +49,13 @@ const UserDropDown = (props: TProps) => {
           >
             <Avatar sx={{ width: 32, height: 32 }}>
               {user?.avatar ? (
-                <Image src={user?.avatar || ''} alt='user' style={{ height: 'auto', width: 'auto' }} />
+                <Image
+                  src={user?.avatar || ''}
+                  alt='user'
+                  style={{ height: 'auto', width: 'auto' }}
+                  width={100}
+                  height={100}
+                />
               ) : (
                 <IconifyIcon icon='basil:user-outline' />
               )}

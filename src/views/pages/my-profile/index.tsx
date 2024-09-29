@@ -3,7 +3,8 @@
 import { NextPage } from 'next'
 
 // ** MUI import
-import { Box, Button, Grid, useTheme } from '@mui/material'
+import { Box, Button, Grid, IconButton, useTheme } from '@mui/material'
+import { Avatar } from '@mui/material'
 
 //** component import  */
 import CustomTextField from 'src/components/text-field'
@@ -14,17 +15,33 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-// **config
-import { EMAIL_REG } from 'src/configs/regex'
-
 // ** react
 import { useEffect, useState } from 'react'
 
-import { Avatar } from '@mui/material'
+// i18n
 import { useTranslation } from 'react-i18next'
+
+// components
 import WrapperFileUpload from 'src/components/wrapper-file-upload'
-import { useAuth } from 'src/hooks/useAuth'
-import Image from 'next/image'
+
+//service
+import { getAuthMe } from 'src/services/auth'
+
+// **utils
+import { toFullName } from 'src/utils/toFullName'
+import { convertToBase64 } from 'src/utils/convertImageToPage64'
+
+// ** redux
+import { AppDispatch, RootState } from 'src/stores'
+import { useDispatch, useSelector } from 'react-redux'
+import { resetInitialState } from 'src/stores/apps/auth'
+import { updateAuthMeAsync } from 'src/stores/apps/auth/actions'
+
+// ** toast
+import toast from 'react-hot-toast'
+
+// **components
+import FallbackSpinner from 'src/components/fall-back'
 
 type TProps = {}
 
@@ -39,21 +56,29 @@ type TDefaultValues = {
 
 const MyProfilePage: NextPage<TProps> = () => {
   // **state
-  const { user } = useAuth()
+  const [loading, setLoading] = useState(false)
+  const [avatar, setAvatar] = useState('')
+  const [roleId, setRoleId] = useState()
+
+  // ** i18n
+  const { t } = useTranslation()
 
   // **theme
   const theme = useTheme()
 
+  // **redux
+  const dispatch: AppDispatch = useDispatch()
+  const { isLoading, isErrorUpdateMe, messageUpdateMe, isSuccessUpdateMe } = useSelector(
+    (state: RootState) => state.auth
+  )
+
   const schema = yup.object().shape({
-    email: yup
-      .string()
-      .required('This field is required')
-      .matches(EMAIL_REG, 'This field must be a valid email address'),
-    fullName: yup.string().required('This field is required'),
-    city: yup.string().required('This field is required'),
-    phoneNumber: yup.string().required('This field is required'),
-    address: yup.string().required('This field is required'),
-    role: yup.string().required('This field is required')
+    email: yup.string().notRequired(),
+    fullName: yup.string().notRequired(),
+    phoneNumber: yup.string().required('This field is required').min(8, 'This field must have at least 8 numbers'),
+    role: yup.string().notRequired(),
+    city: yup.string().notRequired(),
+    address: yup.string().notRequired()
   })
 
   const defaultValues: TDefaultValues = {
@@ -76,236 +101,301 @@ const MyProfilePage: NextPage<TProps> = () => {
     resolver: yupResolver(schema)
   })
 
-  useEffect(() => {
-    if (user) {
-      reset({
-        email: user?.email,
-        address: '',
-        city: '',
-        phoneNumber: '',
-        fullName: user?.lastName + user?.middleName + user?.firstName,
-        role: user?.role?.name
+  const fetchGetAuthMe = async () => {
+    await getAuthMe()
+      .then(async response => {
+        setLoading(false)
+        const data = response?.data
+        if (data) {
+          setRoleId(data?.role?._id)
+          setAvatar(data?.avatar)
+          reset({
+            email: data?.email,
+            address: data?.address,
+            city: data?.city,
+            phoneNumber: data?.phoneNumber,
+            role: data?.role?.name,
+            fullName: toFullName(data?.lastName, data?.middleName, data?.firstName)
+          })
+        }
       })
-    }
-  })
-
-  const onSubmit = (data: any) => {
-    console.log('data: ', { data, errors })
+      .catch(() => {
+        setLoading(false)
+      })
   }
 
-  const { t } = useTranslation()
+  useEffect(() => {
+    fetchGetAuthMe()
+  }, [])
 
-  const handleUploadAvatar = (file: File) => {}
+  useEffect(() => {
+    if (messageUpdateMe) {
+      if (isErrorUpdateMe) {
+        toast.error(messageUpdateMe)
+      } else if (isSuccessUpdateMe) {
+        toast.success(messageUpdateMe)
+        fetchGetAuthMe()
+      }
+      dispatch(resetInitialState())
+    }
+  }, [isErrorUpdateMe, isSuccessUpdateMe, messageUpdateMe])
+
+  const onSubmit = (data: any) => {
+    dispatch(
+      updateAuthMeAsync({
+        email: data.email,
+        firstName: data.fullName,
+        role: roleId,
+        phoneNumber: data.phoneNumber,
+        avatar,
+        address: data.address
+        // city: data.city
+      })
+    )
+  }
+
+  const handleUploadAvatar = async (file: File) => {
+    const base64 = await convertToBase64(file)
+    setAvatar(base64 as string)
+  }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
-      <Grid container spacing={5}>
-        <Grid container item md={6} xs={12}>
-          <Box
-            sx={{
-              height: '100%',
-              width: '100%',
-              backgroundColor: theme.palette.background.paper,
-              borderRadius: '15px !important',
-              py: 5,
-              px: 4
-            }}
-          >
-            <Grid item md={12} xs={12}>
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  gap: 2
-                }}
-              >
-                <Avatar sx={{ width: 100, height: 100 }}>
-                  {user?.avatar ? (
-                    <Image src={user?.avatar || ''} alt='user' style={{ height: 'auto', width: 'auto' }} />
-                  ) : (
-                    <IconifyIcon icon='basil:user-outline' fontSize={60} />
-                  )}
-                </Avatar>
-                <WrapperFileUpload
-                  uploadFunc={handleUploadAvatar}
-                  objectAcceptFile={{
-                    'image/jpeg': ['.jpg', '.jpeg'],
-                    'image/png': ['.png']
+    <>
+      {loading || (isLoading && <FallbackSpinner />)}
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
+        <Grid container spacing={5}>
+          <Grid container item md={6} xs={12}>
+            <Box
+              sx={{
+                height: '100%',
+                width: '100%',
+                backgroundColor: theme.palette.background.paper,
+                borderRadius: '15px !important',
+                py: 5,
+                px: 4
+              }}
+            >
+              <Grid item md={12} xs={12}>
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    gap: 2
                   }}
                 >
-                  <Button
-                    variant='outlined'
-                    sx={{ width: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1.5 }}
+                  <Box sx={{ position: 'relative' }}>
+                    {avatar && (
+                      <IconButton
+                        edge='start'
+                        color='inherit'
+                        sx={{
+                          position: 'absolute',
+                          bottom: -6,
+                          right: -4,
+                          zIndex: 1,
+                          color: theme.palette.error.main
+                        }}
+                        onClick={() => setAvatar('')}
+                      >
+                        <IconifyIcon icon='mingcute:delete-2-line' />
+                      </IconButton>
+                    )}
+                    {avatar ? (
+                      <Avatar src={avatar} sx={{ width: 100, height: 100 }}>
+                        <IconifyIcon icon='basil:user-outline' fontSize={60} />
+                      </Avatar>
+                    ) : (
+                      <Avatar src={avatar} sx={{ width: 100, height: 100 }}>
+                        <IconifyIcon icon='basil:user-outline' fontSize={60} />
+                      </Avatar>
+                    )}
+                  </Box>
+                  <WrapperFileUpload
+                    uploadFunc={handleUploadAvatar}
+                    objectAcceptFile={{
+                      'image/jpeg': ['.jpg', '.jpeg'],
+                      'image/png': ['.png']
+                    }}
                   >
-                    <IconifyIcon icon='noto:camera' style={{ transform: 'translateY(-0.2rem)' }} />
-                    {t('upload_your_avatar')}
-                  </Button>
-                </WrapperFileUpload>
-              </Box>
-            </Grid>
-            <Grid container item spacing={5}>
-              <Grid item md={6} xs={12}>
-                <Controller
-                  control={control}
-                  rules={{
-                    required: true
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomTextField
-                      margin='normal'
-                      required
-                      fullWidth
-                      label='Email'
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder='Enter Your Email'
-                      error={Boolean(errors?.email)}
-                      helperText={errors?.email?.message}
-                    />
-                  )}
-                  name='email'
-                />
+                    <Button
+                      variant='outlined'
+                      sx={{
+                        width: 'auto',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 1.5
+                      }}
+                    >
+                      <IconifyIcon icon='noto:camera' style={{ transform: 'translateY(-0.2rem)' }} />
+                      {avatar ? t('change_your_avatar') : t('upload_your_avatar')}
+                    </Button>
+                  </WrapperFileUpload>
+                </Box>
               </Grid>
-              <Grid item md={6} xs={12}>
-                <Controller
-                  control={control}
-                  rules={{
-                    required: true
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomTextField
-                      margin='normal'
-                      required
-                      fullWidth
-                      label='Role'
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder='Enter Your Role'
-                      disabled
-                      error={Boolean(errors?.role)}
-                      helperText={errors?.role?.message}
-                    />
-                  )}
-                  name='role'
-                />
+              <Grid container item spacing={5}>
+                <Grid item md={6} xs={12}>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <CustomTextField
+                        margin='normal'
+                        required
+                        fullWidth
+                        label='Email'
+                        disabled
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        placeholder='Enter Your Email'
+                        error={Boolean(errors?.email)}
+                        helperText={errors?.email?.message}
+                      />
+                    )}
+                    name='email'
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <CustomTextField
+                        margin='normal'
+                        required
+                        fullWidth
+                        label='Role'
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        placeholder='Enter Your Role'
+                        disabled
+                        error={Boolean(errors?.role)}
+                        helperText={errors?.role?.message}
+                      />
+                    )}
+                    name='role'
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
+            </Box>
+          </Grid>
+
+          <Grid container item md={6} xs={12} mt={{ md: 0, xs: 5 }}>
+            <Box
+              sx={{
+                height: '100%',
+                width: '100%',
+                backgroundColor: theme.palette.background.paper,
+                borderRadius: '15px !important',
+                py: 5,
+                px: 4
+              }}
+              marginLeft={{ md: 5, xs: 0 }}
+            >
+              <Grid container spacing={5}>
+                <Grid item md={6} xs={12}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <CustomTextField
+                        margin='normal'
+                        fullWidth
+                        label='Full Name'
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        placeholder='Enter your full name'
+                        error={Boolean(errors?.fullName)}
+                        helperText={errors?.fullName?.message}
+                      />
+                    )}
+                    name='fullName'
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <CustomTextField
+                        margin='normal'
+                        fullWidth
+                        label='Address'
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        placeholder='Enter your address'
+                      />
+                    )}
+                    name='address'
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <CustomTextField
+                        margin='normal'
+                        fullWidth
+                        label='City'
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        placeholder='Enter your city'
+                      />
+                    )}
+                    name='city'
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <Controller
+                    control={control}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <CustomTextField
+                        margin='normal'
+                        fullWidth
+                        required
+                        label='Phone Number'
+                        onChange={e => {
+                          const numValue = e.target.value.replace(/\D/g, '')
+                          onChange(numValue)
+                        }}
+                        inputProps={{
+                          inputMode: 'numeric',
+                          pattern: '[0-9]*',
+                          minLength: 8
+                        }}
+                        onBlur={onBlur}
+                        value={value}
+                        placeholder='Enter your phone number'
+                        error={Boolean(errors?.phoneNumber)}
+                        helperText={errors?.phoneNumber?.message}
+                      />
+                    )}
+                    name='phoneNumber'
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          </Grid>
         </Grid>
 
-        <Grid container item md={6} xs={12} mt={{ md: 0, xs: 5 }}>
-          <Box
-            sx={{
-              height: '100%',
-              width: '100%',
-              backgroundColor: theme.palette.background.paper,
-              borderRadius: '15px !important',
-              py: 5,
-              px: 4
-            }}
-            marginLeft={{ md: 5, xs: 0 }}
-          >
-            <Grid container spacing={5}>
-              <Grid item md={6} xs={12}>
-                <Controller
-                  control={control}
-                  rules={{
-                    required: true
-                  }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomTextField
-                      margin='normal'
-                      required
-                      fullWidth
-                      label='Full Name'
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder='Enter your full name'
-                      error={Boolean(errors?.fullName)}
-                      helperText={errors?.fullName?.message}
-                    />
-                  )}
-                  name='fullName'
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomTextField
-                      margin='normal'
-                      required
-                      fullWidth
-                      label='Address'
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder='Enter your address'
-                      error={Boolean(errors?.address)}
-                      helperText={errors?.address?.message}
-                    />
-                  )}
-                  name='address'
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomTextField
-                      margin='normal'
-                      required
-                      fullWidth
-                      label='City'
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder='Enter your city'
-                      error={Boolean(errors?.city)}
-                      helperText={errors?.city?.message}
-                    />
-                  )}
-                  name='city'
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <CustomTextField
-                      margin='normal'
-                      required
-                      fullWidth
-                      label='Phone Number'
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder='Enter your phone number'
-                      error={Boolean(errors?.phoneNumber)}
-                      helperText={errors?.phoneNumber?.message}
-                    />
-                  )}
-                  name='phoneNumber'
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-      </Grid>
-
-      <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant='contained' sx={{ mt: 3, mb: 2 }}>
-          Update
-        </Button>
-      </Box>
-    </form>
+        <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+          <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2 }}>
+            Update
+          </Button>
+        </Box>
+      </form>
+    </>
   )
 }
 
