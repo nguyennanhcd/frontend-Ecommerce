@@ -42,6 +42,7 @@ import toast from 'react-hot-toast'
 
 // **components
 import FallbackSpinner from 'src/components/fall-back'
+import Spinner from 'src/components/spinner'
 
 type TProps = {}
 
@@ -165,7 +166,7 @@ const MyProfilePage: NextPage<TProps> = () => {
 
   return (
     <>
-      {loading || (isLoading && <FallbackSpinner />)}
+      {loading || (isLoading && <Spinner />)}
       <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
         <Grid container spacing={5}>
           <Grid container item md={6} xs={12}>
