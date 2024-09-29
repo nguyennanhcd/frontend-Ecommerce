@@ -169,10 +169,15 @@ const UserDropDown = (props: TProps) => {
         </Box>
         <Divider />
         <MenuItem onClick={handleNavigateMyProfile}>
-          <Avatar /> Profile
+          <Avatar>
+            <IconifyIcon icon='basil:user-outline' />
+          </Avatar>{' '}
+          Profile
         </MenuItem>
         <MenuItem onClick={logout}>
-          <ListItemIcon></ListItemIcon>
+          <Avatar sx={{ backgroundColor: 'transparent' }}>
+            <IconifyIcon icon='material-symbols-light:logout' />
+          </Avatar>
           Logout
         </MenuItem>
       </Menu>
