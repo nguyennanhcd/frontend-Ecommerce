@@ -28,7 +28,7 @@ import WrapperFileUpload from 'src/components/wrapper-file-upload'
 import { getAuthMe } from 'src/services/auth'
 
 // **utils
-import { toFullName } from 'src/utils/toFullName'
+import { fullNameSeparator, toFullName } from 'src/utils/toFullName'
 import { convertToBase64 } from 'src/utils/convertImageToPage64'
 
 // ** redux
@@ -62,6 +62,7 @@ const MyProfilePage: NextPage<TProps> = () => {
 
   // ** i18n
   const { t } = useTranslation()
+  const { i18n } = useTranslation()
 
   // **theme
   const theme = useTheme()
@@ -102,6 +103,7 @@ const MyProfilePage: NextPage<TProps> = () => {
   })
 
   const fetchGetAuthMe = async () => {
+    setLoading(true)
     await getAuthMe()
       .then(async response => {
         setLoading(false)
@@ -115,7 +117,7 @@ const MyProfilePage: NextPage<TProps> = () => {
             city: data?.city,
             phoneNumber: data?.phoneNumber,
             role: data?.role?.name,
-            fullName: toFullName(data?.lastName, data?.middleName, data?.firstName)
+            fullName: toFullName(data?.lastName, data?.middleName, data?.firstName, i18n.language)
           })
         }
       })
@@ -126,7 +128,7 @@ const MyProfilePage: NextPage<TProps> = () => {
 
   useEffect(() => {
     fetchGetAuthMe()
-  }, [])
+  }, [i18n.language])
 
   useEffect(() => {
     if (messageUpdateMe) {
@@ -141,15 +143,17 @@ const MyProfilePage: NextPage<TProps> = () => {
   }, [isErrorUpdateMe, isSuccessUpdateMe, messageUpdateMe])
 
   const onSubmit = (data: any) => {
+    const { firstName, lastName, middleName } = fullNameSeparator(data.fullName, i18n.language)
     dispatch(
       updateAuthMeAsync({
-        email: data.email,
-        firstName: data.fullName,
+        email: data?.email,
+        firstName: firstName,
+        lastName: lastName,
+        middleName: middleName,
         role: roleId,
         phoneNumber: data.phoneNumber,
         avatar,
         address: data.address
-        // city: data.city
       })
     )
   }
@@ -244,17 +248,14 @@ const MyProfilePage: NextPage<TProps> = () => {
                     rules={{
                       required: true
                     }}
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    render={({ field: { value } }) => (
                       <CustomTextField
                         margin='normal'
                         required
                         fullWidth
                         label='Email'
                         disabled
-                        onChange={onChange}
-                        onBlur={onBlur}
                         value={value}
-                        placeholder='Enter Your Email'
                         error={Boolean(errors?.email)}
                         helperText={errors?.email?.message}
                       />
@@ -268,16 +269,13 @@ const MyProfilePage: NextPage<TProps> = () => {
                     rules={{
                       required: true
                     }}
-                    render={({ field: { onChange, onBlur, value } }) => (
+                    render={({ field: { value } }) => (
                       <CustomTextField
                         margin='normal'
                         required
                         fullWidth
                         label='Role'
-                        onChange={onChange}
-                        onBlur={onBlur}
                         value={value}
-                        placeholder='Enter Your Role'
                         disabled
                         error={Boolean(errors?.role)}
                         helperText={errors?.role?.message}
