@@ -3,7 +3,7 @@ import { Dispatch } from 'redux'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // ** Axios Imports
-import { registerAuthAsync, updateAuthMeAsync } from './actions'
+import { changePasswordAsync, registerAuthAsync, updateAuthMeAsync } from './actions'
 
 interface DataParams {
   q: string
@@ -25,7 +25,10 @@ const initialState = {
   typeError: '',
   isSuccessUpdateMe: true,
   isErrorUpdateMe: false,
-  messageUpdateMe: ''
+  messageUpdateMe: '',
+  isSuccessChangePassword: true,
+  isErrorChangePassword: false,
+  messageChangePassword: ''
 }
 
 export const authSlice = createSlice({
@@ -41,6 +44,9 @@ export const authSlice = createSlice({
       state.isSuccessUpdateMe = false
       state.isErrorUpdateMe = true
       state.messageUpdateMe = ''
+      state.isSuccessChangePassword = false
+      state.isErrorChangePassword = true
+      state.messageChangePassword = ''
     }
   },
   extraReducers: builder => {
@@ -80,6 +86,25 @@ export const authSlice = createSlice({
       state.isSuccessUpdateMe = false
       state.isErrorUpdateMe = false
       state.messageUpdateMe = ''
+    })
+
+    // change password
+    builder.addCase(changePasswordAsync.pending, (state, action) => {
+      state.isLoading = true
+    })
+    builder.addCase(changePasswordAsync.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.isSuccessChangePassword = !!action.payload?.data
+      state.isErrorChangePassword = !action.payload?.data
+      state.messageChangePassword = action.payload?.message
+      state.typeError = action.payload?.typeError
+    })
+    builder.addCase(changePasswordAsync.rejected, (state, action) => {
+      state.isLoading = false
+      state.typeError = ''
+      state.isSuccessChangePassword = false
+      state.isErrorChangePassword = false
+      state.messageChangePassword = ''
     })
   }
 })
