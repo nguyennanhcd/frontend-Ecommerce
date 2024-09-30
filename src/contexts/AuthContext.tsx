@@ -22,7 +22,7 @@ import { CONFIG_API } from 'src/configs/api'
 // ** Helpers
 import { clearLocalUserData, setLocalUserData } from 'src/helpers/storage'
 import instanceAxios from 'src/helpers/axios'
-import useSafePush from 'src/hooks/useRouterChange'
+import toast from 'react-hot-toast'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -71,18 +71,14 @@ const AuthProvider = ({ children }: Props) => {
       }
     }
   }
-  const { safePush } = useSafePush()
-
   useEffect(() => {
     initAuth()
   }, [])
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
     if (router.isReady === false) return
-    setLoading(true)
     loginAuth({ email: params.email, password: params.password })
       .then(async response => {
-        setLoading(false)
         params.rememberMe
           ? setLocalUserData(
               JSON.stringify(response.data.user),
@@ -90,6 +86,7 @@ const AuthProvider = ({ children }: Props) => {
               response.data.refresh_token
             )
           : null
+        toast.success('Sign in successfully')
         const returnUrl = router.query.returnUrl
         setUser({ ...response.data.user })
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
@@ -97,7 +94,6 @@ const AuthProvider = ({ children }: Props) => {
         router.replace(redirectURL as string)
       })
       .catch(err => {
-        setLoading(false)
         if (errorCallback) errorCallback(err)
       })
   }

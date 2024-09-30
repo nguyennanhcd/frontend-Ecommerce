@@ -40,6 +40,7 @@ import FacebookSvg from '/public/svgs/facebook.svg'
 
 //** hooks
 import { useAuth } from 'src/hooks/useAuth'
+import toast from 'react-hot-toast'
 
 type TProps = {}
 
@@ -81,7 +82,8 @@ const LoginPage: NextPage<TProps> = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors }
+    formState: { errors },
+    setError
   } = useForm({
     defaultValues,
     mode: 'onSubmit',
@@ -90,7 +92,11 @@ const LoginPage: NextPage<TProps> = () => {
 
   const onSubmit = (data: { email: string; password: string }) => {
     if (!Object.keys(errors)?.length) {
-      login({ ...data, rememberMe: isRemember })
+      login({ ...data, rememberMe: isRemember }, err => {
+        if (err?.response?.data?.typeError === 'INVALID') {
+          toast.error('Email or password is incorrect')
+        }
+      })
     }
   }
 
