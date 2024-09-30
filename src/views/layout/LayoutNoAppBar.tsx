@@ -12,12 +12,15 @@ import Container from '@mui/material/Container'
 // ** layout
 import HorizontalLayout from './HorizontalLayout'
 import { useState } from 'react'
+import { useTheme } from '@mui/material'
 
 type TProps = {
   children: React.ReactNode
 }
 
 const LayoutNoAppBar: NextPage<TProps> = ({ children }) => {
+  const theme = useTheme()
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -33,7 +36,15 @@ const LayoutNoAppBar: NextPage<TProps> = ({ children }) => {
         }}
       >
         <Toolbar />
-        <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
+        <Container
+          sx={{
+            m: 4,
+            width: 'calc(100vw - 2rem)',
+            maxWidth: 'unset !important',
+            overflow: 'auto',
+            maxHeight: `calc(100vh - ${theme.mixins.toolbar.minHeight})`
+          }}
+        >
           {children}
         </Container>
       </Box>

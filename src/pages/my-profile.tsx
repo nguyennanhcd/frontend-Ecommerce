@@ -1,15 +1,16 @@
 // **import Next
 import { NextPage } from 'next'
 import { ReactNode } from 'react'
+import LayoutNoAppBar from 'src/views/layout/LayoutNoAppBar'
 
 // ** views
-import BlankLayout from 'src/views/layout/BlankLayout'
-import RegisterPage from 'src/views/pages/register'
+import MyProfilePage from 'src/views/pages/my-profile'
 
 type TProps = {}
 
 const Index: NextPage<TProps> = () => {
-  return <h2>hello</h2>
+  return <MyProfilePage />
 }
 
 export default Index
+Index.getLayout = (page: ReactNode) => <LayoutNoAppBar>{page}</LayoutNoAppBar>

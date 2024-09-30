@@ -82,7 +82,7 @@ const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
                 }
               })
               .catch(e => {
-                handleRedirectLogin(router, setUser)
+                console.error('Failed to refresh token:', e.response ? e.response.data : e.message)
               })
           } else {
             console.log('Refresh token expired or invalid')

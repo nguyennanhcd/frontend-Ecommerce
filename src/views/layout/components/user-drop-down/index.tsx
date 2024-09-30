@@ -1,19 +1,73 @@
 // ** MUI import
-import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from '@mui/material'
+import {
+  Avatar,
+  Badge,
+  Box,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  styled,
+  Tooltip,
+  Typography
+} from '@mui/material'
 
 // ** React
 import React from 'react'
+
+// ** components
 import IconifyIcon from '../../../../components/Icon'
+
+// **next
 import Image from 'next/image'
-import { useAuth } from 'src/hooks/useAuth'
-import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
+
+// ** custom hooks
+import { useAuth } from 'src/hooks/useAuth'
+
+// ** i18next
+import { useTranslation } from 'react-i18next'
+
+// **configs
 import { ROUTE_CONFIG } from 'src/configs/route'
+
+// **utils
+import { toFullName } from 'src/utils/toFullName'
 
 type TProps = {}
 
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    backgroundColor: '#44b700',
+    color: '#44b700',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: 'ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
+      content: '""'
+    }
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0
+    }
+  }
+}))
+
 const UserDropDown = (props: TProps) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
@@ -32,7 +86,7 @@ const UserDropDown = (props: TProps) => {
   }
 
   const handleNavigateMyProfile = () => {
-    router.push(`/${ROUTE_CONFIG.MY_PROFILE}`)
+    router.push(ROUTE_CONFIG.MY_PROFILE)
     handleClose()
   }
   return (
@@ -47,13 +101,15 @@ const UserDropDown = (props: TProps) => {
             aria-haspopup='true'
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>
-              {user?.avatar ? (
-                <Image src={user?.avatar || ''} alt='user' style={{ height: 'auto', width: 'auto' }} />
-              ) : (
-                <IconifyIcon icon='basil:user-outline' />
-              )}
-            </Avatar>
+            <StyledBadge overlap='circular' anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant='dot'>
+              <Avatar sx={{ width: 32, height: 32 }}>
+                {user?.avatar ? (
+                  <Image src={user?.avatar || ''} alt='user' style={{ height: 32, width: 32 }} width={0} height={0} />
+                ) : (
+                  <IconifyIcon icon='basil:user-outline' />
+                )}
+              </Avatar>
+            </StyledBadge>
           </IconButton>
         </Tooltip>
       </Box>
@@ -94,14 +150,34 @@ const UserDropDown = (props: TProps) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          {user?.email} {user?.middleName} {user?.lastName}
-        </MenuItem>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mx: 2, px: 2, pb: 2 }}>
+          <StyledBadge overlap='circular' anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant='dot'>
+            <Avatar sx={{ width: 32, height: 32 }}>
+              {user?.avatar ? (
+                <Image src={user?.avatar || ''} alt='user' style={{ height: 32, width: 32 }} width={0} height={0} />
+              ) : (
+                <IconifyIcon icon='basil:user-outline' />
+              )}
+            </Avatar>
+          </StyledBadge>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography component='span'>
+              {toFullName(user?.lastName || '', user?.middleName || '', user?.firstName || '', i18n.language)}
+            </Typography>
+            <Typography component='span'>{user?.role?.name}</Typography>
+          </Box>
+        </Box>
+        <Divider />
         <MenuItem onClick={handleNavigateMyProfile}>
-          <Avatar /> Profile
+          <Avatar>
+            <IconifyIcon icon='basil:user-outline' />
+          </Avatar>{' '}
+          Profile
         </MenuItem>
         <MenuItem onClick={logout}>
-          <ListItemIcon></ListItemIcon>
+          <Avatar sx={{ backgroundColor: 'transparent' }}>
+            <IconifyIcon icon='material-symbols-light:logout' />
+          </Avatar>
           Logout
         </MenuItem>
       </Menu>
