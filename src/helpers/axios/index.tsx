@@ -78,21 +78,21 @@ const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
                   config.headers['Authorization'] = `Bearer ${newAccessToken}`
                   localStorage.setItem('accessToken', newAccessToken)
                 } else {
-                  console.log('Failed to get new accessToken from API')
+                  handleRedirectLogin(router, setUser)
                 }
               })
               .catch(e => {
-                console.error('Failed to refresh token:', e.response ? e.response.data : e.message)
+                handleRedirectLogin(router, setUser)
               })
           } else {
-            console.log('Refresh token expired or invalid')
+            handleRedirectLogin(router, setUser)
           }
         } else {
-          console.log('No refresh token available')
+          handleRedirectLogin(router, setUser)
         }
       }
     } else {
-      console.log('No access token found')
+      handleRedirectLogin(router, setUser)
     }
     return config
   })
