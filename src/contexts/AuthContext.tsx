@@ -22,6 +22,7 @@ import { CONFIG_API } from 'src/configs/api'
 // ** Helpers
 import { clearLocalUserData, setLocalUserData } from 'src/helpers/storage'
 import instanceAxios from 'src/helpers/axios'
+import useSafePush from 'src/hooks/useRouterChange'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -46,9 +47,8 @@ const AuthProvider = ({ children }: Props) => {
 
   // ** Hooks
   const router = useRouter()
-
-  useEffect(() => {
-    const initAuth = async (): Promise<void> => {
+  const initAuth = async (): Promise<void> => {
+    if (typeof window !== 'undefined') {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
       if (storedToken) {
         setLoading(true)
@@ -70,11 +70,15 @@ const AuthProvider = ({ children }: Props) => {
         setLoading(false)
       }
     }
+  }
+  const { safePush } = useSafePush()
 
+  useEffect(() => {
     initAuth()
   }, [])
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
+    if (router.isReady === false) return
     setLoading(true)
     loginAuth({ email: params.email, password: params.password })
       .then(async response => {
@@ -92,7 +96,6 @@ const AuthProvider = ({ children }: Props) => {
 
         router.replace(redirectURL as string)
       })
-
       .catch(err => {
         setLoading(false)
         if (errorCallback) errorCallback(err)
@@ -103,7 +106,7 @@ const AuthProvider = ({ children }: Props) => {
     logoutAuth().then(res => {
       setUser(null)
       clearLocalUserData()
-      router.push('/login')
+      router.push('/login', undefined, { shallow: true })
     })
   }
 

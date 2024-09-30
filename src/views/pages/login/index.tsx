@@ -92,7 +92,6 @@ const LoginPage: NextPage<TProps> = () => {
     if (!Object.keys(errors)?.length) {
       login({ ...data, rememberMe: isRemember })
     }
-    console.log('data: ', { data, errors })
   }
 
   return (

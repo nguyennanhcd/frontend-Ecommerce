@@ -42,19 +42,21 @@ const handleRedirectLogin = (router: NextRouter, setUser: (data: UserDataType | 
 }
 
 const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
-  const router = useRouter()
-  const { accessToken, refreshToken } = getLocalUserData()
-  const { setUser } = useAuth()
-
   instanceAxios.interceptors.request.use(async config => {
+    const { accessToken, refreshToken } = getLocalUserData()
     if (accessToken) {
       const decodeAccessToken = jwtDecode(accessToken)
 
+      // Check if accessToken is valid
       if (decodeAccessToken?.exp && decodeAccessToken.exp > Date.now() / 1000) {
         config.headers['Authorization'] = `Bearer ${accessToken}`
       } else {
+        console.log('Access token expired, attempting to refresh token...')
         if (refreshToken) {
           const decodeRefreshToken = jwtDecode(refreshToken)
+          console.log('Decoded refreshToken:', decodeRefreshToken)
+
+          // Check if refreshToken is valid
           if (decodeRefreshToken?.exp && decodeRefreshToken.exp > Date.now() / 1000) {
             await axios
               .post(
@@ -67,32 +69,32 @@ const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
                 }
               )
               .then(res => {
+                console.log('Refresh token response:', res)
                 const newAccessToken = res?.data?.data?.accessToken
                 if (newAccessToken) {
                   config.headers['Authorization'] = `Bearer ${newAccessToken}`
+                  localStorage.setItem('accessToken', newAccessToken)
                 } else {
-                  handleRedirectLogin(router, setUser)
+                  console.log('Failed to get new accessToken from API')
                 }
               })
               .catch(e => {
-                handleRedirectLogin(router, setUser)
+                console.error('Failed to refresh token:', e.response ? e.response.data : e.message)
               })
           } else {
-            handleRedirectLogin(router, setUser)
+            console.log('Refresh token expired or invalid')
           }
         } else {
-          handleRedirectLogin(router, setUser)
+          console.log('No refresh token available')
         }
       }
     } else {
-      handleRedirectLogin(router, setUser)
+      console.log('No access token found')
     }
     return config
   })
 
-  instanceAxios.interceptors.response.use(config => {
-    return config
-  })
+  instanceAxios.interceptors.response.use(config => config)
 
   return <>{children}</>
 }
