@@ -43,6 +43,8 @@ import toast from 'react-hot-toast'
 // **components
 import FallbackSpinner from 'src/components/fall-back'
 import Spinner from 'src/components/spinner'
+import CustomSelect from 'src/components/custom-select'
+import { transform } from 'next/dist/build/swc'
 
 type TProps = {}
 
@@ -242,7 +244,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                   </WrapperFileUpload>
                 </Box>
               </Grid>
-              <Grid container item spacing={5}>
+              <Grid container item spacing={5} sx={{ marginTop: 1 }}>
                 <Grid item md={6} xs={12}>
                   <Controller
                     control={control}
@@ -251,7 +253,6 @@ const MyProfilePage: NextPage<TProps> = () => {
                     }}
                     render={({ field: { value } }) => (
                       <CustomTextField
-                        margin='normal'
                         required
                         fullWidth
                         label='Email'
@@ -270,17 +271,26 @@ const MyProfilePage: NextPage<TProps> = () => {
                     rules={{
                       required: true
                     }}
-                    render={({ field: { value } }) => (
-                      <CustomTextField
-                        margin='normal'
-                        required
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <CustomSelect
                         fullWidth
-                        label='Role'
-                        value={value}
-                        disabled
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        options={[]}
                         error={Boolean(errors?.role)}
-                        helperText={errors?.role?.message}
+                        value={value}
+                        placeholder='Enter you role'
                       />
+                      // <CustomTextField
+                      //   margin='normal'
+                      //   required
+                      //   fullWidth
+                      //   label='Role'
+                      //   value={value}
+                      //   disabled
+                      //   error={Boolean(errors?.role)}
+                      //   helperText={errors?.role?.message}
+                      // />
                     )}
                     name='role'
                   />
