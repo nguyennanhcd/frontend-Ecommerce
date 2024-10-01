@@ -46,21 +46,17 @@ export const setTemporaryToken = (accessToken: string) => {
 export const getTemporaryToken = () => {
   if (typeof window !== 'undefined') {
     return {
-      accessToken: window.localStorage.getItem(ACCESS_TOKEN)
+      temporaryToken: window.localStorage.getItem(TEMPORARY_TOKEN)
     }
   }
 
   return {
-    userData: null,
-    accessToken: null,
-    refreshToken: null
+    temporaryToken: null
   }
 }
 
-export const clearL = () => {
+export const clearTemporaryToken = () => {
   if (typeof window !== 'undefined') {
-    window.localStorage.removeItem(USER_DATA)
-    window.localStorage.removeItem(ACCESS_TOKEN)
-    window.localStorage.removeItem(REFRESH_TOKEN)
+    window.localStorage.removeItem(TEMPORARY_TOKEN)
   }
 }

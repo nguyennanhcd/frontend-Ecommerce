@@ -5,7 +5,14 @@ import axios from 'axios'
 import { BASE_URL, CONFIG_API } from 'src/configs/api'
 
 // ** storage
-import { clearLocalUserData, getLocalUserData } from '../storage'
+import {
+  clearLocalUserData,
+  clearTemporaryToken,
+  getLocalUserData,
+  getTemporaryToken,
+  setLocalUserData,
+  setTemporaryToken
+} from '../storage'
 
 // ** jwt
 import { jwtDecode } from 'jwt-decode'
@@ -39,20 +46,27 @@ const handleRedirectLogin = (router: NextRouter, setUser: (data: UserDataType | 
   }
   setUser(null)
   clearLocalUserData()
+  clearTemporaryToken()
 }
 
 const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
   const router = useRouter()
-  const { setUser } = useAuth()
+  const { setUser, user } = useAuth()
 
   instanceAxios.interceptors.request.use(async config => {
     const { accessToken, refreshToken } = getLocalUserData()
-    if (accessToken) {
-      const decodeAccessToken = jwtDecode(accessToken)
+    const { temporaryToken } = getTemporaryToken()
 
-      // Check if accessToken is valid
+    if (accessToken || temporaryToken) {
+      let decodeAccessToken: any = {}
+      if (accessToken) {
+        decodeAccessToken = jwtDecode(accessToken)
+      } else if (temporaryToken) {
+        decodeAccessToken = jwtDecode(temporaryToken)
+      }
+
       if (decodeAccessToken?.exp && decodeAccessToken.exp > Date.now() / 1000) {
-        config.headers['Authorization'] = `Bearer ${accessToken}`
+        config.headers['Authorization'] = `Bearer ${accessToken ? accessToken : temporaryToken}`
       } else {
         console.log('Access token expired, attempting to refresh token...')
         if (refreshToken) {
@@ -72,11 +86,15 @@ const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
                 }
               )
               .then(res => {
-                console.log('Refresh token response:', res)
-                const newAccessToken = res?.data?.data?.accessToken
+                const newAccessToken = res?.data?.data?.access_token
                 if (newAccessToken) {
                   config.headers['Authorization'] = `Bearer ${newAccessToken}`
-                  localStorage.setItem('accessToken', newAccessToken)
+                  if (accessToken) {
+                    setLocalUserData(JSON.stringify(user), newAccessToken, refreshToken)
+                  } else {
+                    setLocalUserData(JSON.stringify(user), '', refreshToken)
+                    setTemporaryToken(newAccessToken)
+                  }
                 } else {
                   handleRedirectLogin(router, setUser)
                 }
