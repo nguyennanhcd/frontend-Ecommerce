@@ -3,7 +3,7 @@
 import { NextPage } from 'next'
 
 // ** MUI import
-import { Box, Button, Grid, IconButton, useTheme } from '@mui/material'
+import { Box, Button, FormHelperText, Grid, IconButton, InputLabel, useTheme } from '@mui/material'
 import { Avatar } from '@mui/material'
 
 //** component import  */
@@ -272,25 +272,42 @@ const MyProfilePage: NextPage<TProps> = () => {
                       required: true
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
-                      <CustomSelect
-                        fullWidth
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        options={[]}
-                        error={Boolean(errors?.role)}
-                        value={value}
-                        placeholder='Enter you role'
-                      />
-                      // <CustomTextField
-                      //   margin='normal'
-                      //   required
-                      //   fullWidth
-                      //   label='Role'
-                      //   value={value}
-                      //   disabled
-                      //   error={Boolean(errors?.role)}
-                      //   helperText={errors?.role?.message}
-                      // />
+                      <Box>
+                        <InputLabel
+                          sx={{
+                            fontSize: '15px',
+                            marginBottom: '0',
+                            display: 'block',
+                            paddingBottom: '2px',
+                            color: errors?.role
+                              ? theme.palette.error.main
+                              : `rgba(${theme.palette.customColors.main}, 0.42)`
+                          }}
+                        >
+                          Role
+                        </InputLabel>
+                        <CustomSelect
+                          fullWidth
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          options={[]}
+                          error={Boolean(errors?.role)}
+                          value={value}
+                          placeholder='Enter you role'
+                        />
+                        {!errors?.email?.message && (
+                          <FormHelperText
+                            sx={{
+                              color: !errors?.role
+                                ? theme.palette.error.main
+                                : `rgba(${theme.palette.customColors.main}, 0.42)`
+                            }}
+                          >
+                            {' '}
+                            {!errors?.email?.message}
+                          </FormHelperText>
+                        )}
+                      </Box>
                     )}
                     name='role'
                   />
@@ -350,19 +367,46 @@ const MyProfilePage: NextPage<TProps> = () => {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <Controller
+                    name='city'
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
-                      <CustomTextField
-                        margin='normal'
-                        fullWidth
-                        label='City'
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                        placeholder='Enter your city'
-                      />
+                      <Box>
+                        <InputLabel
+                          sx={{
+                            fontSize: '15px',
+                            marginBottom: '0',
+                            display: 'block',
+                            paddingBottom: '2px',
+                            color: errors?.role
+                              ? theme.palette.error.main
+                              : `rgba(${theme.palette.customColors.main}, 0.42)`
+                          }}
+                        >
+                          City
+                        </InputLabel>
+                        <CustomSelect
+                          fullWidth
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          options={[]}
+                          error={Boolean(errors?.role)}
+                          value={value}
+                          placeholder='Enter you city'
+                        />
+                        {!errors?.email?.message && (
+                          <FormHelperText
+                            sx={{
+                              color: !errors?.role
+                                ? theme.palette.error.main
+                                : `rgba(${theme.palette.customColors.main}, 0.42)`
+                            }}
+                          >
+                            {' '}
+                            {!errors?.email?.message}
+                          </FormHelperText>
+                        )}
+                      </Box>
                     )}
-                    name='city'
                   />
                 </Grid>
                 <Grid item md={6} xs={12}>
@@ -370,7 +414,6 @@ const MyProfilePage: NextPage<TProps> = () => {
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
                       <CustomTextField
-                        margin='normal'
                         fullWidth
                         required
                         label='Phone Number'
