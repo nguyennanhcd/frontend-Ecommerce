@@ -2,7 +2,6 @@
 'use client'
 import { NextPage } from 'next'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 
 // ** MUI import
 import { Box, Button, CssBaseline, IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
@@ -40,6 +39,7 @@ import toast from 'react-hot-toast'
 // ** components
 import FallbackSpinner from 'src/components/fall-back'
 import { useAuth } from 'src/hooks/useAuth'
+import { t } from 'i18next'
 
 type TProps = {}
 
@@ -111,9 +111,9 @@ const ChangePasswordPage: NextPage<TProps> = () => {
   })
 
   const onSubmit = (data: { currentPassword: string; newPassword: string }) => {
-    // if (Object.keys(errors).length) {
-    dispatch(changePasswordAsync({ currentPassword: data.currentPassword, newPassword: data.newPassword }))
-    // }
+    if (Object.keys(errors).length) {
+      dispatch(changePasswordAsync({ currentPassword: data.currentPassword, newPassword: data.newPassword }))
+    }
   }
 
   useEffect(() => {
@@ -143,12 +143,13 @@ const ChangePasswordPage: NextPage<TProps> = () => {
       >
         <Box
           sx={{
+            height: '79vh',
+            width: '50vw',
             display: { md: 'flex', xs: 'none' },
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: '20px',
             backgroundColor: theme.palette.customColors.bodyBg,
-            height: '100%',
             minWidth: '50%'
           }}
         >
@@ -169,7 +170,7 @@ const ChangePasswordPage: NextPage<TProps> = () => {
             }}
           >
             <Typography component='h1' variant='h5'>
-              Change Password
+              {t('change_password')}
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
               <Box sx={{ mt: 2, width: '21rem' }}>
@@ -182,8 +183,8 @@ const ChangePasswordPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Current Password'
-                      placeholder='Current Password'
+                      label={t('current_password')}
+                      placeholder={t('current_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
@@ -219,8 +220,8 @@ const ChangePasswordPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='New Password'
-                      placeholder='New Password'
+                      label={t('new_password')}
+                      placeholder={t('new_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
@@ -256,8 +257,8 @@ const ChangePasswordPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Confirm New Password'
-                      placeholder='Confirm New Password'
+                      label={t('confirm_new_password')}
+                      placeholder={t('confirm_new_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
@@ -284,7 +285,7 @@ const ChangePasswordPage: NextPage<TProps> = () => {
               </Box>
 
               <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                Change Password
+                {t('change_password')}
               </Button>
             </form>
           </Box>

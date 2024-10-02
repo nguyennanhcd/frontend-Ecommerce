@@ -23,6 +23,9 @@ import { Button } from '@mui/material'
 // ** config route
 import { ROUTE_CONFIG } from 'src/configs/route'
 
+// ** 18n
+import { t } from 'i18next'
+
 const drawerWidth: number = 240
 
 interface AppBarProps extends MuiAppBarProps {
@@ -83,7 +86,7 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
           </IconButton>
         )}
         <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
-          Dashboard
+          {t('dashboard')}
         </Typography>
         <LanguageDropdown />
         <ModeToggle />
@@ -95,7 +98,7 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
             sx={{ width: 'auto', ml: '0.3rem' }}
             onClick={() => router.push(ROUTE_CONFIG.LOGIN)}
           >
-            Sign In
+            {t('sign_in')}
           </Button>
         )}
       </Toolbar>

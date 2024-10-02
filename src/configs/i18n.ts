@@ -7,13 +7,11 @@ i18n
   .use(Backend)
   // Enable automatic language detection
   .use(LanguageDetector)
-
   // Enables the hook initialization module
   .use(initReactI18next)
   .init({
     lng: 'vi',
     backend: {
-      /* translation file path */
       loadPath: '/locales/{{lng}}.json'
     },
     fallbackLng: 'vi',
@@ -30,13 +28,13 @@ i18n
 
 export default i18n
 
-export const LANGUAGE_OPTIONS = [
+export const getLanguageOptions = () => [
   {
-    lang: 'Tiếng Việt',
+    lang: i18n.t('vietnamese'),
     value: 'vi'
   },
   {
-    lang: 'English',
+    lang: i18n.t('english'),
     value: 'en'
   }
 ]

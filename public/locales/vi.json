@@ -1,5 +1,26 @@
 {
   "Account": "Tài khoản",
   "upload_your_avatar": "Tải ảnh đại diện",
-  "change_your_avatar": "Thay đổi ảnh đại diện"
+  "change_your_avatar": "Thay đổi ảnh đại diện",
+  "dashboard": "Bảng điều khiển",
+  "profile": "Thông tin người dùng",
+  "change_password": "Thay đổi mật khẩu",
+  "logout": "Đăng xuất",
+  "sign_in": "Đăng nhập",
+  "english": "Tiếng Anh",
+  "vietnamese": "Tiếng Việt",
+  "role": "Vai trò",
+  "full_name": "Họ Và Tên",
+  "address": "Địa chỉ",
+  "city": "Thành Phố",
+  "phone_number": "Số Điện Thoại",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "confirm_password": "Xác thực mật khẩu",
+  "save": "Lưu",
+  "update": "Cập nhật",
+  "current_password": "Mật khẩu hiện tại",
+  "new_password": "Mật khẩu mới ",
+  "confirm_new_password": "Xác nhận mật khẩu mới",
+  "forgot_password": "Quên mật khẩu ?"
 }
