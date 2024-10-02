@@ -107,9 +107,9 @@ const UserDropDown = (props: TProps) => {
             aria-expanded={open ? 'true' : undefined}
           >
             <StyledBadge overlap='circular' anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant='dot'>
-              <Avatar sx={{ width: 32, height: 32 }}>
+              <Avatar sx={{ width: 34, height: 34 }}>
                 {user?.avatar ? (
-                  <Image src={user?.avatar || ''} alt='user' style={{ height: 32, width: 32 }} width={0} height={0} />
+                  <Image src={user?.avatar || ''} alt='user' style={{ height: 36, width: 36 }} width={0} height={0} />
                 ) : (
                   <IconifyIcon icon='basil:user-outline' />
                 )}
@@ -155,21 +155,23 @@ const UserDropDown = (props: TProps) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mx: 2, px: 2, pb: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 5, mx: 2, px: 2, pb: 2 }}>
           <StyledBadge overlap='circular' anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant='dot'>
-            <Avatar sx={{ width: 32, height: 32 }}>
+            <Avatar sx={{ width: 34, height: 34 }}>
               {user?.avatar ? (
-                <Image src={user?.avatar || ''} alt='user' style={{ height: 32, width: 32 }} width={0} height={0} />
+                <Image src={user?.avatar || ''} alt='user' style={{ height: 36, width: 36 }} width={0} height={0} />
               ) : (
                 <IconifyIcon icon='basil:user-outline' />
               )}
             </Avatar>
           </StyledBadge>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography component='span'>
+            <Typography variant='h6' fontWeight='bold'>
               {toFullName(user?.lastName || '', user?.middleName || '', user?.firstName || '', i18n.language)}
             </Typography>
-            <Typography component='span'>{user?.role?.name}</Typography>
+            <Typography variant='h6' fontWeight={100} sx={{ justifySelf: 'center' }}>
+              {user?.email}
+            </Typography>
           </Box>
         </Box>
         <Divider />
