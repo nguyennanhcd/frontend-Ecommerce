@@ -41,6 +41,7 @@ import FacebookSvg from '/public/svgs/facebook.svg'
 //** hooks
 import { useAuth } from 'src/hooks/useAuth'
 import toast from 'react-hot-toast'
+import { t } from 'i18next'
 
 type TProps = {}
 
@@ -94,7 +95,7 @@ const LoginPage: NextPage<TProps> = () => {
     if (!Object.keys(errors)?.length) {
       login({ ...data, rememberMe: isRemember }, err => {
         if (err?.response?.data?.typeError === 'INVALID') {
-          toast.error('Email or password is incorrect')
+          toast.error(t('email_or_password_is_incorrect'))
         }
       })
     }
@@ -139,7 +140,7 @@ const LoginPage: NextPage<TProps> = () => {
           }}
         >
           <Typography component='h1' variant='h5'>
-            Sign in
+            {t('sign_in')}
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
             <Box sx={{ mt: 2, width: '21rem' }}>
@@ -176,8 +177,8 @@ const LoginPage: NextPage<TProps> = () => {
                   <CustomTextField
                     required
                     fullWidth
-                    label='Password'
-                    placeholder='Password'
+                    label={t('password')}
+                    placeholder={t('password')}
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
@@ -220,21 +221,21 @@ const LoginPage: NextPage<TProps> = () => {
                     color='primary'
                   />
                 }
-                label='Remember me'
+                label={t('remember_me')}
               />
 
-              <Typography>Forgot password?</Typography>
+              <Typography>{t('forgot_password')}</Typography>
             </Box>
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-              Sign In
+              {t('sign_in')}
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography>Don't have an account?</Typography>
+              <Typography>{t('dont_have_an_account')}</Typography>
               <Link style={{ color: theme.palette.primary.main }} href='/register'>
-                {'Sign up'}
+                {t('sign_up')}
               </Link>
             </Box>
-            <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
+            <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>{t('or')}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
               <IconButton>
                 <Image src={FacebookSvg} style={{ height: 27, width: 27 }} alt='facebook' />

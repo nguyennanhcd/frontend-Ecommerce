@@ -22,5 +22,14 @@
   "current_password": "Current Password",
   "new_password": "New Password",
   "confirm_new_password": "Confirm New Password",
-  "forgot_password": "Forgot Password ?"
+  "forgot_password": "Forgot Password ?",
+  "register": "Register",
+  "have_you_already_have_an_account": "Have you already had an account ?",
+  "log_in": "Log In",
+  "or": "Or",
+  "remember_me": "Remember Me",
+  "dont_have_an_account": "Don't have an account",
+  "sign_up": "Sign Up",
+  "sign_in_successfully": "Sign in successfully",
+  "email_or_password_is_incorrect": "Email or password is incorrect"
 }

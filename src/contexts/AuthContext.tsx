@@ -4,9 +4,6 @@ import { createContext, useEffect, useState, ReactNode } from 'react'
 // ** Next Import
 import { useRouter } from 'next/router'
 
-// ** Axios
-import axios from 'axios'
-
 // ** Config
 import authConfig from 'src/configs/auth'
 
@@ -22,7 +19,12 @@ import { CONFIG_API } from 'src/configs/api'
 // ** Helpers
 import { clearLocalUserData, setLocalUserData, setTemporaryToken } from 'src/helpers/storage'
 import instanceAxios from 'src/helpers/axios'
+
+// ** toast
 import toast from 'react-hot-toast'
+
+// **i18next
+import { t } from 'i18next'
 
 // ** Defaults
 const defaultProvider: AuthValuesType = {
@@ -84,7 +86,7 @@ const AuthProvider = ({ children }: Props) => {
         } else {
           setTemporaryToken(response.data.access_token)
         }
-        toast.success('Sign in successfully')
+        toast.success(t('sign_in_successfully'))
         const returnUrl = router.query.returnUrl
         setUser({ ...response.data.user })
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
