@@ -5,7 +5,7 @@ import { Box, BoxProps, IconButton, Popover, styled, Typography } from '@mui/mat
 import React from 'react'
 import IconifyIcon from '../../../../components/Icon'
 import { useTranslation } from 'react-i18next'
-import { LANGUAGE_OPTIONS } from 'src/configs/i18n'
+import { getLanguageOptions } from 'src/configs/i18n'
 
 type TProps = {}
 
@@ -51,6 +51,8 @@ const LanguageDropdown = (props: TProps) => {
     handleClose()
   }
 
+  const languageOptions = getLanguageOptions()
+
   return (
     <>
       <IconButton aria-describedby={id} onClick={handleClick} color='inherit'>
@@ -69,7 +71,7 @@ const LanguageDropdown = (props: TProps) => {
           transform: 'translate(-4.5rem, 0.1rem)'
         }}
       >
-        {LANGUAGE_OPTIONS.map(lang => (
+        {languageOptions.map(lang => (
           <StyleItemLanguage
             selected={lang.value === i18n.language}
             key={lang.value}

@@ -1,5 +1,26 @@
 {
   "Account": "Account",
   "upload_your_avatar": "Upload Your Picture",
-  "change_your_avatar": "Change Your Avatar"
+  "change_your_avatar": "Change Your Avatar",
+  "dashboard": "Dashboard",
+  "profile": "Profile",
+  "change_password": "Change Password",
+  "logout": "Logout",
+  "sign_in": "Sign in",
+  "english": "English",
+  "vietnamese": "Vietnamese",
+  "role": "Role",
+  "full_name": "Full Name",
+  "address": "Address",
+  "city": "City",
+  "phone_number": "Phone Number",
+  "email": "Email",
+  "password": "Password",
+  "confirm_password": "Confirm Password",
+  "save": "Save",
+  "update": "Update",
+  "current_password": "Current Password",
+  "new_password": "New Password",
+  "confirm_new_password": "Confirm New Password",
+  "forgot_password": "Forgot Password ?"
 }

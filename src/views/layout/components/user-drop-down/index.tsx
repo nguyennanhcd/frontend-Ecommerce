@@ -176,20 +176,20 @@ const UserDropDown = (props: TProps) => {
         <MenuItem onClick={handleNavigateMyProfile}>
           <Avatar sx={{ backgroundColor: 'transparent' }}>
             <IconifyIcon icon='basil:user-outline' />
-          </Avatar>{' '}
-          Profile
+          </Avatar>
+          {t('profile')}
         </MenuItem>
         <MenuItem onClick={handleNavigateChangePassword}>
           <Avatar sx={{ backgroundColor: 'transparent' }}>
             <IconifyIcon icon='teenyicons:password-outline' width={18} />
           </Avatar>
-          Change Password
+          {t('change_password')}
         </MenuItem>
         <MenuItem onClick={logout}>
           <Avatar sx={{ backgroundColor: 'transparent' }}>
             <IconifyIcon icon='material-symbols-light:logout' />
           </Avatar>
-          Logout
+          {t('logout')}
         </MenuItem>
       </Menu>
     </React.Fragment>

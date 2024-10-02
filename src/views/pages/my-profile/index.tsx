@@ -41,10 +41,9 @@ import { updateAuthMeAsync } from 'src/stores/apps/auth/actions'
 import toast from 'react-hot-toast'
 
 // **components
-import FallbackSpinner from 'src/components/fall-back'
 import Spinner from 'src/components/spinner'
 import CustomSelect from 'src/components/custom-select'
-import { transform } from 'next/dist/build/swc'
+import { t } from 'i18next'
 
 type TProps = {}
 
@@ -64,7 +63,6 @@ const MyProfilePage: NextPage<TProps> = () => {
   const [roleId, setRoleId] = useState()
 
   // ** i18n
-  const { t } = useTranslation()
   const { i18n } = useTranslation()
 
   // **theme
@@ -284,7 +282,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                               : `rgba(${theme.palette.customColors.main}, 0.42)`
                           }}
                         >
-                          Role
+                          {t('role')}
                         </InputLabel>
                         <CustomSelect
                           fullWidth
@@ -336,7 +334,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                       <CustomTextField
                         margin='normal'
                         fullWidth
-                        label='Full Name'
+                        label={t('full_name')}
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
@@ -355,7 +353,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                       <CustomTextField
                         margin='normal'
                         fullWidth
-                        label='Address'
+                        label={t('address')}
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
@@ -382,7 +380,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                               : `rgba(${theme.palette.customColors.main}, 0.42)`
                           }}
                         >
-                          City
+                          {t('city')}
                         </InputLabel>
                         <CustomSelect
                           fullWidth
@@ -416,7 +414,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                       <CustomTextField
                         fullWidth
                         required
-                        label='Phone Number'
+                        label={t('phone_number')}
                         onChange={e => {
                           const numValue = e.target.value.replace(/\D/g, '')
                           onChange(numValue)
@@ -443,7 +441,7 @@ const MyProfilePage: NextPage<TProps> = () => {
 
         <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
           <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2 }}>
-            Update
+            {t('update')}
           </Button>
         </Box>
       </form>
