@@ -22,5 +22,14 @@
   "current_password": "Mật khẩu hiện tại",
   "new_password": "Mật khẩu mới ",
   "confirm_new_password": "Xác nhận mật khẩu mới",
-  "forgot_password": "Quên mật khẩu ?"
+  "forgot_password": "Quên mật khẩu ?",
+  "register": "Đăng ký",
+  "have_you_already_have_an_account": "Bạn đã có tài khoản rồi ?",
+  "log_in": "Đăng nhập",
+  "or": "hoặc",
+  "remember_me": "Ghi nhớ tài khoản",
+  "dont_have_an_account": "Chưa có tài khoản ?",
+  "sign_up": "Đăng ký",
+  "sign_in_successfully": "Đăng nhập thành công",
+  "email_or_password_is_incorrect": "Tài khoản hoặc mật khẩu không chính xác"
 }

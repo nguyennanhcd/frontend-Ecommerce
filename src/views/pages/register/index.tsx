@@ -39,6 +39,7 @@ import FallbackSpinner from 'src/components/fall-back'
 import { resetInitialState } from 'src/stores/apps/auth'
 import { useRouter } from 'next/router'
 import { ROUTE_CONFIG } from 'src/configs/route'
+import { t } from 'i18next'
 
 type TProps = {}
 
@@ -160,7 +161,7 @@ const RegisterPage: NextPage<TProps> = () => {
             }}
           >
             <Typography component='h1' variant='h5'>
-              Register
+              {t('register')}
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
               <Box sx={{ mt: 2, width: '21rem' }}>
@@ -197,8 +198,8 @@ const RegisterPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Password'
-                      placeholder='Password'
+                      label={t('password')}
+                      placeholder={t('password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
@@ -234,8 +235,8 @@ const RegisterPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Confirm Password'
-                      placeholder='Confirm Password'
+                      label={t('confirm_password')}
+                      placeholder={t('confirm_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
@@ -262,15 +263,15 @@ const RegisterPage: NextPage<TProps> = () => {
               </Box>
 
               <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                Sign Up
+                {t('register')}
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography>Have you already had an account ? </Typography>
+                <Typography>{t('have_you_already_have_an_account')} </Typography>
                 <Link style={{ color: theme.palette.primary.main }} href='/login'>
-                  {'Log In'}
+                  {t('log_in')}
                 </Link>
               </Box>
-              <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
+              <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>{t('or')}</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
                 <IconButton>
                   <Image src={FacebookSvg} style={{ height: 27, width: 27 }} alt='facebook' />
