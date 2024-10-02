@@ -2,7 +2,16 @@
 import { NextPage } from 'next'
 
 // ** mui
-import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import {
+  Collapse,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  ListItemTextProps,
+  styled,
+  Tooltip
+} from '@mui/material'
 
 // ** react
 import React, { useEffect, useState } from 'react'
@@ -27,6 +36,15 @@ type TListItems = {
   disabled: boolean
 }
 
+const StyledListItemText = styled(ListItemText)<ListItemTextProps>(({ theme }) => ({
+  '.MuiTypography-root.MuiTypography-body1.MuiListItemText-primary': {
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    display: 'block',
+    width: '100%'
+  }
+}))
+
 const RecursiveListItem: NextPage<TListItems> = ({ items, level, openItems, setOpenItems, disabled }) => {
   const handleClick = (title: string) => {
     if (!disabled) {
@@ -48,7 +66,11 @@ const RecursiveListItem: NextPage<TListItems> = ({ items, level, openItems, setO
             <ListItemIcon>
               <IconifyIcon icon={item?.icon} />
             </ListItemIcon>
-            {!disabled && <ListItemText primary={item?.title} />}
+            {!disabled && (
+              <Tooltip title={item?.title}>
+                <StyledListItemText primary={item?.title} />
+              </Tooltip>
+            )}
             {item?.children && item?.children.length > 0 && (
               <>
                 {openItems[item.title] ? (

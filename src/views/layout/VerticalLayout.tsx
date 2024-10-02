@@ -57,11 +57,12 @@ const VerticalLayout: NextPage<TProps> = ({ open, toggleDrawer }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-end',
-          px: [1]
+          px: [1],
+          overflowX: 'hidden'
         }}
       >
-        <IconButton style={{ transform: 'translateX(0.5rem)' }} onClick={toggleDrawer}>
-          <IconifyIcon icon='mdi:menu-open' />
+        <IconButton style={{ transform: 'translateX(0.3rem)' }} onClick={toggleDrawer}>
+          <IconifyIcon icon='mingcute:left-fill' />
         </IconButton>
       </Toolbar>
       <Divider />

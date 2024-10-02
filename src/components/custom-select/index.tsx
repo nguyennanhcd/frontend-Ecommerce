@@ -6,12 +6,19 @@ interface TCustomSelect extends Omit<SelectProps, 'children'> {
 
 const StyledSelect = styled(Select)<SelectProps>(({ theme }) => ({
   '& .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input': {
-    padding: '8px 8px 8px 10px !important',
-    height: '38px',
+    padding: '4px 8px 8px 10px !important',
+    height: '40px',
     boxSizing: 'border-box'
   },
   legend: {
     display: 'none'
+  },
+  '.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium': {
+    top: 'calc(50% - .6em) !important'
+  },
+  '.MuiOutlinedInput-notchedOutline': {
+    top: '-4px !important',
+    bottom: '2px !important'
   }
 }))
 
