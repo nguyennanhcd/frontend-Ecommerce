@@ -8,12 +8,12 @@ export const VerticalItem = [
       {
         title: 'Người dùng',
         icon: 'clarity:users-line',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.SYSTEM.USER
+        path: ROUTE_CONFIG.SYSTEM.USER
       },
       {
         title: 'Nhóm vai trò',
         icon: 'oui:app-users-roles',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.SYSTEM.ROLE
+        path: ROUTE_CONFIG.SYSTEM.ROLE
       }
     ]
   },
@@ -24,22 +24,22 @@ export const VerticalItem = [
       {
         title: 'Danh sách sản phẩm',
         icon: 'fluent-mdl2:product-list',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.PRODUCT.MANAGE_PRODUCT
+        path: ROUTE_CONFIG.PRODUCTS.MANAGE_PRODUCTS
       },
       {
         title: 'Danh mục sản phẩm',
         icon: 'carbon:category',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.PRODUCT.MANAGE_PRODUCT_TYPES
+        path: ROUTE_CONFIG.PRODUCTS.MANAGE_PRODUCT_TYPES
       },
       {
         title: 'Danh sách đơn hàng',
         icon: 'material-symbols:draft-orders-rounded',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.PRODUCT.MANAGE_ORDER
+        path: ROUTE_CONFIG.PRODUCTS.MANAGE_ORDERS
       },
       {
         title: 'Danh sách đánh giá',
         icon: 'material-symbols:feedback-outline',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.PRODUCT.MANAGE_REVIEW
+        path: ROUTE_CONFIG.PRODUCTS.MANAGE_REVIEWS
       }
     ]
   },
@@ -50,17 +50,17 @@ export const VerticalItem = [
       {
         title: 'Thành phố',
         icon: 'emojione:cityscape',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.SETTINGS.CITY
+        path: ROUTE_CONFIG.SETTINGS.CITY
       },
       {
         title: 'Phương thức giao hàng',
         icon: 'emojione:delivery-truck',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.SETTINGS.DELIVERY_TYPES
+        path: ROUTE_CONFIG.SETTINGS.DELIVERY_TYPES
       },
       {
         title: 'Phương thức thanh toán',
         icon: 'streamline:payment-10',
-        path: ROUTE_CONFIG.MANAGE_SYSTEM.SETTINGS.PAYMENT_TYPES
+        path: ROUTE_CONFIG.SETTINGS.PAYMENT_TYPES
       }
     ]
   }

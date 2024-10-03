@@ -1,14 +1,13 @@
 // **import Next
 import { NextPage } from 'next'
-import { ReactNode } from 'react'
 
 // ** views
 import RegisterPage from 'src/views/pages/register'
 
 type TProps = {}
 
-const ManageSystem: NextPage<TProps> = () => {
-  return <RegisterPage />
+const Register: NextPage<TProps> = () => {
+  return <h1>City</h1>
 }
 
-export default ManageSystem
+export default Register

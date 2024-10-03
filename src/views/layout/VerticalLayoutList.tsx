@@ -3,6 +3,7 @@ import { NextPage } from 'next'
 
 // ** mui
 import {
+  Box,
   Collapse,
   List,
   ListItemButton,
@@ -23,6 +24,7 @@ import { VerticalItem } from 'src/configs/layout'
 // ** components
 import IconifyIcon from 'src/components/Icon'
 import { useRouter } from 'next/router'
+import { hexToRGBA } from 'src/utils/hex-to-rgba'
 
 type TProps = {
   open: boolean
@@ -50,10 +52,8 @@ const StyledListItemText = styled(ListItemText)<TListItemText>(({ theme, active 
     overflow: 'hidden',
     display: 'block',
     width: '100%',
-    color: active
-      ? `${theme.palette.customColors.lightPaperBg} !important`
-      : `${theme.palette.customColors.main}, 0.78`,
-    fontWeight: active ? 550 : 300
+    color: active ? `${theme.palette.primary.main} !important` : `${theme.palette.customColors.main}, 0.78`,
+    fontWeight: active ? 540 : 200
   }
 }))
 
@@ -77,9 +77,11 @@ const RecursiveListItem: NextPage<TListItems> = ({
     }
   }
 
+  console.log(openItems)
+
   const handleSelectItem = (path: string) => {
     setActivePath(path)
-    if (path) {
+    if (path && !disabled) {
       router.push(path)
     }
   }
@@ -91,43 +93,58 @@ const RecursiveListItem: NextPage<TListItems> = ({
           <ListItemButton
             sx={{
               padding: `0.8rem 0.2rem 0.8rem ${level * 0.9}rem`,
+              margin: '1px 0',
               backgroundColor:
-                (activePath && item.path === activePath) || !!openItems[item.title]
-                  ? `${theme.palette.primary.main} !important`
-                  : theme.palette.background.paper
+                (activePath && item.path === activePath) || openItems[item.title]
+                  ? `${hexToRGBA(theme.palette.primary.main, 0.15)} !important`
+                  : theme.palette.customColors.main
             }}
             onClick={() => item.children && handleClick(item.title)}
           >
             <ListItemIcon>
-              <IconifyIcon
-                icon={item?.icon}
-                style={{
-                  color:
-                    item.path === activePath || openItems[item.title]
-                      ? `${theme.palette.customColors.lightPaperBg}`
-                      : `${theme.palette.customColors.main}, 0.78`
+              <Box
+                sx={{
+                  borderRadius: '8px',
+                  width: '30px',
+                  height: '30px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor:
+                    (activePath && item.path === activePath) || openItems[item.title]
+                      ? `${theme.palette.primary.main} !important`
+                      : theme.palette.customColors.lightPaperBg
                 }}
-              />
+              >
+                <IconifyIcon
+                  icon={item?.icon}
+                  style={{
+                    color:
+                      item.path === activePath || openItems[item.title]
+                        ? `${theme.palette.customColors.lightPaperBg}`
+                        : `${theme.palette.customColors.main}, 0.78`
+                  }}
+                />
+              </Box>
             </ListItemIcon>
             {!disabled && (
               <Tooltip title={item?.title}>
                 <StyledListItemText
                   primary={item?.title}
                   onClick={() => handleSelectItem(item.path)}
-                  active={(activePath && item.path === activePath) || !!openItems[item.title]}
+                  active={Boolean((activePath && item.path === activePath) || !!openItems[item.title])}
                 />
               </Tooltip>
             )}
             {item?.children && item?.children.length > 0 && (
               <>
-                {openItems[item.title] ? (
+                {(activePath && item.path === activePath) || openItems[item.title] ? (
                   <IconifyIcon
                     icon='mdi:expand-less'
                     style={{
-                      color:
-                        item.path === activePath || openItems[item.title]
-                          ? `${theme.palette.customColors.lightPaperBg}`
-                          : `${theme.palette.customColors.main}, 0.78`
+                      color: openItems[item.title]
+                        ? `${theme.palette.primary.main}`
+                        : `${theme.palette.customColors.main}, 0.78`
                     }}
                   />
                 ) : (
@@ -171,7 +188,7 @@ const ListVerticalLayout: NextPage<TProps> = ({ open }) => {
 
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', padding: 0 }}
       component='nav'
       aria-labelledby='nested-list-subheader'
     >
