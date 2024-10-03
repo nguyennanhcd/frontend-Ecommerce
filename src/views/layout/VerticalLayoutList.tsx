@@ -112,7 +112,7 @@ const RecursiveListItem: NextPage<TListItems> = ({
                   alignItems: 'center',
                   backgroundColor:
                     (activePath && item.path === activePath) || openItems[item.title]
-                      ? `${theme.palette.primary.main} !important`
+                      ? `${theme.palette.primary.light} !important`
                       : theme.palette.customColors.lightPaperBg
                 }}
               >
@@ -121,8 +121,8 @@ const RecursiveListItem: NextPage<TListItems> = ({
                   style={{
                     color:
                       item.path === activePath || openItems[item.title]
-                        ? `${theme.palette.customColors.lightPaperBg}`
-                        : `${theme.palette.customColors.main}, 0.78`
+                        ? theme.palette.primary.contrastText
+                        : theme.palette.text.primary
                   }}
                 />
               </Box>
