@@ -10,7 +10,8 @@ import {
   ListItemText,
   ListItemTextProps,
   styled,
-  Tooltip
+  Tooltip,
+  useTheme
 } from '@mui/material'
 
 // ** react
@@ -21,6 +22,7 @@ import { VerticalItem } from 'src/configs/layout'
 
 // ** components
 import IconifyIcon from 'src/components/Icon'
+import { useRouter } from 'next/router'
 
 type TProps = {
   open: boolean
@@ -34,24 +36,51 @@ type TListItems = {
   items: any
   setOpenItems: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>
   disabled: boolean
+  activePath: string | null
+  setActivePath: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-const StyledListItemText = styled(ListItemText)<ListItemTextProps>(({ theme }) => ({
+interface TListItemText extends ListItemTextProps {
+  active: boolean
+}
+
+const StyledListItemText = styled(ListItemText)<TListItemText>(({ theme, active }) => ({
   '.MuiTypography-root.MuiTypography-body1.MuiListItemText-primary': {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     display: 'block',
-    width: '100%'
+    width: '100%',
+    color: active
+      ? `${theme.palette.customColors.lightPaperBg} !important`
+      : `${theme.palette.customColors.main}, 0.78`,
+    fontWeight: active ? 550 : 300
   }
 }))
 
-const RecursiveListItem: NextPage<TListItems> = ({ items, level, openItems, setOpenItems, disabled }) => {
+const RecursiveListItem: NextPage<TListItems> = ({
+  items,
+  level,
+  openItems,
+  setOpenItems,
+  disabled,
+  activePath,
+  setActivePath
+}) => {
+  const theme = useTheme()
+  const router = useRouter()
+
   const handleClick = (title: string) => {
     if (!disabled) {
-      setOpenItems(prev => ({
-        ...prev,
-        [title]: !prev[title]
-      }))
+      setOpenItems({
+        [title]: !openItems[title]
+      })
+    }
+  }
+
+  const handleSelectItem = (path: string) => {
+    setActivePath(path)
+    if (path) {
+      router.push(path)
     }
   }
 
@@ -60,21 +89,47 @@ const RecursiveListItem: NextPage<TListItems> = ({ items, level, openItems, setO
       {items.map((item: any, id: number) => (
         <React.Fragment key={id}>
           <ListItemButton
-            sx={{ padding: `0.8rem 0.2rem 0.8rem ${level * 0.9}rem` }}
+            sx={{
+              padding: `0.8rem 0.2rem 0.8rem ${level * 0.9}rem`,
+              backgroundColor:
+                (activePath && item.path === activePath) || !!openItems[item.title]
+                  ? `${theme.palette.primary.main} !important`
+                  : theme.palette.background.paper
+            }}
             onClick={() => item.children && handleClick(item.title)}
           >
             <ListItemIcon>
-              <IconifyIcon icon={item?.icon} />
+              <IconifyIcon
+                icon={item?.icon}
+                style={{
+                  color:
+                    item.path === activePath || openItems[item.title]
+                      ? `${theme.palette.customColors.lightPaperBg}`
+                      : `${theme.palette.customColors.main}, 0.78`
+                }}
+              />
             </ListItemIcon>
             {!disabled && (
               <Tooltip title={item?.title}>
-                <StyledListItemText primary={item?.title} />
+                <StyledListItemText
+                  primary={item?.title}
+                  onClick={() => handleSelectItem(item.path)}
+                  active={(activePath && item.path === activePath) || !!openItems[item.title]}
+                />
               </Tooltip>
             )}
             {item?.children && item?.children.length > 0 && (
               <>
                 {openItems[item.title] ? (
-                  <IconifyIcon icon='mdi:expand-less' />
+                  <IconifyIcon
+                    icon='mdi:expand-less'
+                    style={{
+                      color:
+                        item.path === activePath || openItems[item.title]
+                          ? `${theme.palette.customColors.lightPaperBg}`
+                          : `${theme.palette.customColors.main}, 0.78`
+                    }}
+                  />
                 ) : (
                   <IconifyIcon icon='mdi:expand-more' />
                 )}
@@ -89,6 +144,8 @@ const RecursiveListItem: NextPage<TListItems> = ({ items, level, openItems, setO
                 openItems={openItems}
                 setOpenItems={setOpenItems}
                 disabled={disabled}
+                activePath={activePath}
+                setActivePath={setActivePath}
               />
             </Collapse>
           )}
@@ -100,6 +157,7 @@ const RecursiveListItem: NextPage<TListItems> = ({ items, level, openItems, setO
 
 const ListVerticalLayout: NextPage<TProps> = ({ open }) => {
   const [openItems, setOpenItems] = useState<{ [key: string]: boolean }>({})
+  const [activePath, setActivePath] = useState<null | string>('')
 
   useEffect(() => {
     if (open) {
@@ -123,6 +181,8 @@ const ListVerticalLayout: NextPage<TProps> = ({ open }) => {
         disabled={open}
         openItems={openItems}
         setOpenItems={setOpenItems}
+        activePath={activePath}
+        setActivePath={setActivePath}
       />
     </List>
   )
