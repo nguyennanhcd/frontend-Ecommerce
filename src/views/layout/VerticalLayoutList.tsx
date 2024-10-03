@@ -99,7 +99,12 @@ const RecursiveListItem: NextPage<TListItems> = ({
                   ? `${hexToRGBA(theme.palette.primary.main, 0.15)} !important`
                   : theme.palette.customColors.main
             }}
-            onClick={() => item.children && handleClick(item.title)}
+            onClick={() => {
+              if (item.children) {
+                handleClick(item.title)
+              }
+              handleSelectItem(item.path)
+            }}
           >
             <ListItemIcon>
               <Box
@@ -131,7 +136,6 @@ const RecursiveListItem: NextPage<TListItems> = ({
               <Tooltip title={item?.title}>
                 <StyledListItemText
                   primary={item?.title}
-                  onClick={() => handleSelectItem(item.path)}
                   active={Boolean((activePath && item.path === activePath) || !!openItems[item.title])}
                 />
               </Tooltip>
