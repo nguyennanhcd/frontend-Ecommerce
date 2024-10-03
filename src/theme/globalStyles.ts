@@ -54,6 +54,22 @@ const GlobalStyles = (theme: Theme) => {
         position: 'fixed',
         backgroundColor: theme.palette.primary.main
       }
+    },
+
+    // Scrollbar styling (macOS-like)
+    '*::-webkit-scrollbar': {
+      width: '8px',
+      height: '8px'
+    },
+    '*::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent'
+    },
+    '*::-webkit-scrollbar-thumb': {
+      backgroundColor: theme.palette.mode === 'light' ? '#a8a8a8' : '#555',
+      borderRadius: '10px'
+    },
+    '*::-webkit-scrollbar-thumb:hover': {
+      backgroundColor: theme.palette.mode === 'light' ? '#555' : '#333'
     }
   }
 }
