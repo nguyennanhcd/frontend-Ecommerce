@@ -44,6 +44,7 @@ import toast from 'react-hot-toast'
 import Spinner from 'src/components/spinner'
 import CustomSelect from 'src/components/custom-select'
 import { t } from 'i18next'
+import CustomModal from 'src/components/custom-modal'
 
 type TProps = {}
 
@@ -166,285 +167,287 @@ const MyProfilePage: NextPage<TProps> = () => {
 
   return (
     <>
-      {loading || (isLoading && <Spinner />)}
-      <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
-        <Grid container spacing={5}>
-          <Grid container item md={6} xs={12}>
-            <Box
-              sx={{
-                height: '100%',
-                width: '100%',
-                backgroundColor: theme.palette.background.paper,
-                borderRadius: '15px !important',
-                py: 5,
-                px: 4
-              }}
-            >
-              <Grid item md={12} xs={12}>
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    gap: 2
-                  }}
-                >
-                  <Box sx={{ position: 'relative' }}>
-                    {avatar && (
-                      <IconButton
-                        edge='start'
-                        color='inherit'
-                        sx={{
-                          position: 'absolute',
-                          bottom: -6,
-                          right: -4,
-                          zIndex: 1,
-                          color: theme.palette.error.main
-                        }}
-                        onClick={() => setAvatar('')}
-                      >
-                        <IconifyIcon icon='mingcute:delete-2-line' />
-                      </IconButton>
-                    )}
-                    {avatar ? (
-                      <Avatar src={avatar} sx={{ width: 100, height: 100 }}>
-                        <IconifyIcon icon='basil:user-outline' fontSize={60} />
-                      </Avatar>
-                    ) : (
-                      <Avatar src={avatar} sx={{ width: 100, height: 100 }}>
-                        <IconifyIcon icon='basil:user-outline' fontSize={60} />
-                      </Avatar>
-                    )}
-                  </Box>
-                  <WrapperFileUpload
-                    uploadFunc={handleUploadAvatar}
-                    objectAcceptFile={{
-                      'image/jpeg': ['.jpg', '.jpeg'],
-                      'image/png': ['.png']
+      <CustomModal open={true} handleClose={() => {}}>
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate style={{ backgroundColor: '#fff' }}>
+          <Grid container spacing={5}>
+            <Grid container item md={6} xs={12}>
+              <Box
+                sx={{
+                  height: '100%',
+                  width: '100%',
+                  backgroundColor: theme.palette.background.paper,
+                  borderRadius: '15px !important',
+                  py: 5,
+                  px: 4
+                }}
+              >
+                <Grid item md={12} xs={12}>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      gap: 2
                     }}
                   >
-                    <Button
-                      variant='outlined'
-                      sx={{
-                        width: 'auto',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: 1.5
+                    <Box sx={{ position: 'relative' }}>
+                      {avatar && (
+                        <IconButton
+                          edge='start'
+                          color='inherit'
+                          sx={{
+                            position: 'absolute',
+                            bottom: -6,
+                            right: -4,
+                            zIndex: 1,
+                            color: theme.palette.error.main
+                          }}
+                          onClick={() => setAvatar('')}
+                        >
+                          <IconifyIcon icon='mingcute:delete-2-line' />
+                        </IconButton>
+                      )}
+                      {avatar ? (
+                        <Avatar src={avatar} sx={{ width: 100, height: 100 }}>
+                          <IconifyIcon icon='basil:user-outline' fontSize={60} />
+                        </Avatar>
+                      ) : (
+                        <Avatar src={avatar} sx={{ width: 100, height: 100 }}>
+                          <IconifyIcon icon='basil:user-outline' fontSize={60} />
+                        </Avatar>
+                      )}
+                    </Box>
+                    <WrapperFileUpload
+                      uploadFunc={handleUploadAvatar}
+                      objectAcceptFile={{
+                        'image/jpeg': ['.jpg', '.jpeg'],
+                        'image/png': ['.png']
                       }}
                     >
-                      <IconifyIcon icon='noto:camera' style={{ transform: 'translateY(-0.2rem)' }} />
-                      {avatar ? t('change_your_avatar') : t('upload_your_avatar')}
-                    </Button>
-                  </WrapperFileUpload>
-                </Box>
-              </Grid>
-              <Grid container item spacing={5} sx={{ marginTop: 1 }}>
-                <Grid item md={6} xs={12}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true
-                    }}
-                    render={({ field: { value } }) => (
-                      <CustomTextField
-                        required
-                        fullWidth
-                        label='Email'
-                        disabled
-                        value={value}
-                        error={Boolean(errors?.email)}
-                        helperText={errors?.email?.message}
-                      />
-                    )}
-                    name='email'
-                  />
+                      <Button
+                        variant='outlined'
+                        sx={{
+                          width: 'auto',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          gap: 1.5
+                        }}
+                      >
+                        <IconifyIcon icon='noto:camera' style={{ transform: 'translateY(-0.2rem)' }} />
+                        {avatar ? t('change_your_avatar') : t('upload_your_avatar')}
+                      </Button>
+                    </WrapperFileUpload>
+                  </Box>
                 </Grid>
-                <Grid item md={6} xs={12}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Box>
-                        <InputLabel
-                          sx={{
-                            fontSize: '15px',
-                            marginBottom: '0',
-                            display: 'block',
-                            paddingBottom: '2px',
-                            color: errors?.role
-                              ? theme.palette.error.main
-                              : `rgba(${theme.palette.customColors.main}, 0.42)`
-                          }}
-                        >
-                          {t('role')}
-                        </InputLabel>
-                        <CustomSelect
+                <Grid container item spacing={5} sx={{ marginTop: 1 }}>
+                  <Grid item md={6} xs={12}>
+                    <Controller
+                      control={control}
+                      rules={{
+                        required: true
+                      }}
+                      render={({ field: { value } }) => (
+                        <CustomTextField
+                          required
                           fullWidth
-                          onChange={onChange}
-                          onBlur={onBlur}
-                          options={[]}
-                          error={Boolean(errors?.role)}
+                          label='Email'
+                          disabled
                           value={value}
-                          placeholder='Enter you role'
+                          error={Boolean(errors?.email)}
+                          helperText={errors?.email?.message}
                         />
-                        {!errors?.email?.message && (
-                          <FormHelperText
+                      )}
+                      name='email'
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <Controller
+                      control={control}
+                      rules={{
+                        required: true
+                      }}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Box>
+                          <InputLabel
                             sx={{
-                              color: !errors?.role
+                              fontSize: '15px',
+                              marginBottom: '0',
+                              display: 'block',
+                              paddingBottom: '2px',
+                              color: errors?.role
                                 ? theme.palette.error.main
                                 : `rgba(${theme.palette.customColors.main}, 0.42)`
                             }}
                           >
-                            {' '}
-                            {!errors?.email?.message}
-                          </FormHelperText>
-                        )}
-                      </Box>
-                    )}
-                    name='role'
-                  />
+                            {t('role')}
+                          </InputLabel>
+                          <CustomSelect
+                            fullWidth
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            options={[]}
+                            error={Boolean(errors?.role)}
+                            value={value}
+                            placeholder='Enter you role'
+                          />
+                          {!errors?.email?.message && (
+                            <FormHelperText
+                              sx={{
+                                color: !errors?.role
+                                  ? theme.palette.error.main
+                                  : `rgba(${theme.palette.customColors.main}, 0.42)`
+                              }}
+                            >
+                              {' '}
+                              {!errors?.email?.message}
+                            </FormHelperText>
+                          )}
+                        </Box>
+                      )}
+                      name='role'
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
-          </Grid>
+              </Box>
+            </Grid>
 
-          <Grid container item md={6} xs={12} mt={{ md: 0, xs: 5 }}>
-            <Box
-              sx={{
-                height: '100%',
-                width: '100%',
-                backgroundColor: theme.palette.background.paper,
-                borderRadius: '15px !important',
-                py: 5,
-                px: 4
-              }}
-              marginLeft={{ md: 5, xs: 0 }}
-            >
-              <Grid container spacing={5}>
-                <Grid item md={6} xs={12}>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <CustomTextField
-                        margin='normal'
-                        fullWidth
-                        label={t('full_name')}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                        placeholder='Enter your full name'
-                        error={Boolean(errors?.fullName)}
-                        helperText={errors?.fullName?.message}
-                      />
-                    )}
-                    name='fullName'
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <CustomTextField
-                        margin='normal'
-                        fullWidth
-                        label={t('address')}
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                        placeholder='Enter your address'
-                      />
-                    )}
-                    name='address'
-                  />
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <Controller
-                    name='city'
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Box>
-                        <InputLabel
-                          sx={{
-                            fontSize: '15px',
-                            marginBottom: '0',
-                            display: 'block',
-                            paddingBottom: '2px',
-                            color: errors?.role
-                              ? theme.palette.error.main
-                              : `rgba(${theme.palette.customColors.main}, 0.42)`
-                          }}
-                        >
-                          {t('city')}
-                        </InputLabel>
-                        <CustomSelect
+            <Grid container item md={12} xs={12} mt={{ md: 0, xs: 5 }}>
+              <Box
+                sx={{
+                  height: '100%',
+                  width: '100%',
+                  backgroundColor: theme.palette.background.paper,
+                  borderRadius: '15px !important',
+                  py: 5,
+                  px: 4
+                }}
+                marginLeft={{ md: 5, xs: 0 }}
+              >
+                <Grid container spacing={5}>
+                  <Grid item md={6} xs={12}>
+                    <Controller
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <CustomTextField
+                          margin='normal'
                           fullWidth
+                          label={t('full_name')}
                           onChange={onChange}
                           onBlur={onBlur}
-                          options={[]}
-                          error={Boolean(errors?.role)}
                           value={value}
-                          placeholder='Enter you city'
+                          placeholder='Enter your full name'
+                          error={Boolean(errors?.fullName)}
+                          helperText={errors?.fullName?.message}
                         />
-                        {!errors?.email?.message && (
-                          <FormHelperText
+                      )}
+                      name='fullName'
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <Controller
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <CustomTextField
+                          margin='normal'
+                          fullWidth
+                          label={t('address')}
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          value={value}
+                          placeholder='Enter your address'
+                        />
+                      )}
+                      name='address'
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <Controller
+                      name='city'
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Box>
+                          <InputLabel
                             sx={{
-                              color: !errors?.role
+                              fontSize: '15px',
+                              marginBottom: '0',
+                              display: 'block',
+                              paddingBottom: '2px',
+                              color: errors?.role
                                 ? theme.palette.error.main
                                 : `rgba(${theme.palette.customColors.main}, 0.42)`
                             }}
                           >
-                            {' '}
-                            {!errors?.email?.message}
-                          </FormHelperText>
-                        )}
-                      </Box>
-                    )}
-                  />
+                            {t('city')}
+                          </InputLabel>
+                          <CustomSelect
+                            fullWidth
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            options={[]}
+                            error={Boolean(errors?.role)}
+                            value={value}
+                            placeholder='Enter you city'
+                          />
+                          {!errors?.email?.message && (
+                            <FormHelperText
+                              sx={{
+                                color: !errors?.role
+                                  ? theme.palette.error.main
+                                  : `rgba(${theme.palette.customColors.main}, 0.42)`
+                              }}
+                            >
+                              {' '}
+                              {!errors?.email?.message}
+                            </FormHelperText>
+                          )}
+                        </Box>
+                      )}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <Controller
+                      control={control}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <CustomTextField
+                          fullWidth
+                          required
+                          label={t('phone_number')}
+                          onChange={e => {
+                            const numValue = e.target.value.replace(/\D/g, '')
+                            onChange(numValue)
+                          }}
+                          inputProps={{
+                            inputMode: 'numeric',
+                            pattern: '[0-9]*',
+                            minLength: 8
+                          }}
+                          onBlur={onBlur}
+                          value={value}
+                          placeholder='Enter your phone number'
+                          error={Boolean(errors?.phoneNumber)}
+                          helperText={errors?.phoneNumber?.message}
+                        />
+                      )}
+                      name='phoneNumber'
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item md={6} xs={12}>
-                  <Controller
-                    control={control}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <CustomTextField
-                        fullWidth
-                        required
-                        label={t('phone_number')}
-                        onChange={e => {
-                          const numValue = e.target.value.replace(/\D/g, '')
-                          onChange(numValue)
-                        }}
-                        inputProps={{
-                          inputMode: 'numeric',
-                          pattern: '[0-9]*',
-                          minLength: 8
-                        }}
-                        onBlur={onBlur}
-                        value={value}
-                        placeholder='Enter your phone number'
-                        error={Boolean(errors?.phoneNumber)}
-                        helperText={errors?.phoneNumber?.message}
-                      />
-                    )}
-                    name='phoneNumber'
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
 
-        <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-          <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2 }}>
-            {t('update')}
-          </Button>
-        </Box>
-      </form>
+          <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+            <Button type='submit' variant='contained' sx={{ mt: 3, mb: 2 }}>
+              {t('update')}
+            </Button>
+          </Box>
+        </form>
+      </CustomModal>
+      {loading || (isLoading && <Spinner />)}
     </>
   )
 }
